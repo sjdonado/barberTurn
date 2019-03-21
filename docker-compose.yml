@@ -1,0 +1,33 @@
+version: '3.1'
+services:
+  db:
+    image: mongo
+    restart: always
+    volumes:
+      - ./mongo-entrypoint:/docker-entrypoint-initdb.d
+    ports:
+      - 27017:27017
+    environment:
+      MONGO_INITDB_DATABASE: barber_turn
+      MONGO_INITDB_ROOT_USERNAME: barber_turn_root
+      MONGO_INITDB_ROOT_PASSWORD: root_12345
+  api:
+    build: .
+    environment:
+      NODE_ENV: development
+    volumes:
+      - ./api:/usr/src/app
+    command: bash -c "while ! curl -s db:27017 > /dev/null; do echo waiting for db:27017; sleep 3; done; if [ ! -d 'node_modules' ]; then yarn; fi; yarn start"
+    ports:
+      - 3000:3000
+    depends_on:
+      - db
+  ui:
+    build: .
+    volumes:
+      - ./ui:/usr/src/app
+    command: bash -c "if [ ! -d 'node_modules' ]; then yarn; fi; yarn start"
+    ports:
+      - 80:3000
+    depends_on:
+      - api
