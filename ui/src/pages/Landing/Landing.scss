@@ -1,0 +1,260 @@
+@import url('https://fonts.googleapis.com/css?family=Monoton');
+div.hero-image {
+  height: 100vh;
+  background-image: url(./assets/images/hero-bg.jpg);
+  background-repeat:no-repeat;
+  -webkit-background-size:cover;
+  -moz-background-size:cover;
+  -o-background-size:cover;
+  background-size:cover;
+  background-position:center;
+  div.hero-content {
+    height: 100%;
+    flex-direction: column;
+    align-items: center;
+    place-content: center;
+    display: flex;
+    h1 {
+      color: white;
+      font-size: 6em;
+      font-weight: bold;
+      animation: blur 1s ease-out 2s infinite;
+      text-shadow: 0px 0px 5px #fff, 0px 0px 7px #fff;
+    }
+  }
+  div.scroll-down{
+    position: absolute;
+    bottom: 60px;
+    left: 50%;
+    cursor: pointer;
+    span{
+      display: block;
+      width: 10px;
+      height: 10px;
+      border-bottom: 5px solid white;
+      border-right: 5px solid white;
+      transform: rotate(45deg);
+      margin: -10px;
+      animation: animate 2s infinite;
+    }
+    span:nth-child(2){
+      animation-delay: -0.2s;
+    }
+    span:nth-child(3){
+      animation-delay: -0.4s;
+    }
+  }
+}
+
+div.desc{
+  img {
+    height: 420px;
+  }
+  div.content{
+    h2 {
+      font-size:3em;
+      color: #212121;
+    }
+    p {
+      font-size:1.3em;
+      color: #616161;
+    }
+  }    
+}
+
+div.features{
+  h2{
+    font-size:3em;
+    color: white;
+    font-weight: unset;
+    font-family: Monoton;
+    -webkit-animation: featuresNeon 1.5s ease-in-out infinite alternate;
+    -moz-animation: featuresNeon 1.5s ease-in-out infinite alternate;
+    animation: featuresNeon 1.5s ease-in-out infinite alternate;
+    margin-top: unset;
+    margin-bottom: 1.5em;
+  }
+  div.icons{
+    color: white;
+    display: flex;
+    flex-direction: row;
+    place-content: center;
+    align-items: center;
+    @media screen and (max-width: 900px) {
+      flex-direction: column;
+      > div {
+        &:nth-last-child(n+2) {
+          margin-right: 0 !important;
+          margin-bottom: 3em;
+        }  
+      }
+    }
+    > div {
+      &:nth-last-child(n+2) {
+        margin-right: 5em;
+      }
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      place-content: center;
+      max-width: 15em;
+      >svg{
+        font-size: 5em;
+        margin-bottom: 0.2em;
+      }
+      >span{
+        text-align: center;
+      }
+    }
+  }
+}
+
+div.steps{
+  h2{
+    margin-top: 0;
+    margin-bottom: 1.5em;
+    font-size: 3em;
+    text-shadow:0px 1px 3px rgba(0,0,0,0.4),
+                0px 8px 13px rgba(0,0,0,0.1),
+                0px 18px 23px rgba(0,0,0,0.1);
+  }
+  >div.cards{
+    display: flex;
+    flex-direction: row;
+    place-content: center;
+    align-items: center;
+    @media screen and (max-width: 900px) {
+      flex-direction: column;
+      >div{
+        &:nth-last-child(n+2){
+          margin-right: 0 !important;
+          margin-bottom: 3em;
+        }
+      }
+    }
+    >div{      
+      &:nth-last-child(n+2){
+        margin-right: 5em;
+      }
+      div.content{
+        height: 100%;
+        display: flex;
+        flex-direction: column;
+        place-content: center;
+        align-items: center;
+      }
+      >div{
+        width: 15em;
+        height: 15em;
+        color: #616161;
+      }
+    }
+    div.or{
+      display: flex;
+      flex-direction: row;
+      align-items: center;
+      place-content: center;
+      margin: 10px 0;
+      width: 100%;
+      color: #cbd6e2;
+      >div{
+        flex: 1 1 auto;
+        border: 1px solid #cbd6e2;
+      }
+      >span{
+        padding: 0 20px;
+      }
+    }
+  }
+}
+
+div.special-card{
+  border-radius: 10%;
+}
+
+span.credits{
+  position: absolute;
+  bottom: 18px;
+  font-size: 0.8em;
+  color: rgb(97, 97, 97);
+  &, svg {
+    font-size: 0.9em;
+  }
+  a{
+    text-decoration: unset;
+    color: inherit;
+  }
+}
+
+div.bar{
+  >a{
+    cursor: pointer;
+    color: white;
+    &:nth-last-child(n+2){
+      margin-right: 20px;
+    }
+    text-decoration: none;
+    -webkit-transition: all 0.375s cubic-bezier(0.4, 0, 0.2, 1);
+    -moz-transition: all 0.375s cubic-bezier(0.4, 0, 0.2, 1);
+    -o-transition: all 0.375s cubic-bezier(0.4, 0, 0.2, 1);
+    transition: all 0.375s cubic-bezier(0.4, 0, 0.2, 1);
+    &:hover {
+      color: #C3C3C3;
+    }
+  }
+  button{
+    color: white;
+    border: 1px solid white;
+    &:hover{
+      background-color: rgba(255, 255, 255, 0.08);
+    }
+  }
+}
+
+@keyframes blur {
+  from {
+    text-shadow:0px 0px 10px #fff,
+      0px 0px 10px #fff, 
+      0px 0px 25px #fff,
+      0px 0px 25px #fff,
+      0px 0px 25px #fff,
+      0px 0px 25px #fff,
+      0px 0px 25px #fff,
+      0px 0px 25px #fff,
+      0px 0px 50px #fff,
+      0px 0px 50px #fff,
+      0px 0px 50px #7B96B8,
+      0px 0px 150px #7B96B8,
+      0px 10px 100px #7B96B8,
+      0px 10px 100px #7B96B8,
+      0px 10px 100px #7B96B8,
+      0px 10px 100px #7B96B8,
+      0px -10px 100px #7B96B8,
+      0px -10px 100px #7B96B8;
+  }
+}
+
+@keyframes animate {
+  0%{
+      opacity: 0;
+      transform: rotate(45deg) translate(-20px,-20px);
+  }
+  50%{
+      opacity: 1;
+  }
+  100%{
+      opacity: 0;
+      transform: rotate(45deg) translate(20px,20px);
+  }
+}
+
+@-webkit-keyframes featuresNeon {
+  from {
+    text-shadow: 0 0 10px #fff, 0 0 20px #fff, 0 0 30px #fff, 0 0 40px #FF1177, 
+    0 0 70px #FF1177, 0 0 80px #FF1177, 0 0 100px #FF1177, 0 0 150px #FF1177;
+  }
+  to {
+    text-shadow: 0 0 5px #fff, 0 0 10px #fff, 0 0 15px #fff, 0 0 20px #FF1177, 
+    0 0 35px #FF1177, 0 0 40px #FF1177, 0 0 50px #FF1177, 0 0 75px #FF1177;
+  }
+}
