@@ -1,0 +1,3 @@
+#!/bin/bash
+
+ssh -i "barberturn.pem" ubuntu@ec2-3-18-246-31.us-east-2.compute.amazonaws.com

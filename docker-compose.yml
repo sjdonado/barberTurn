@@ -8,9 +8,9 @@ services:
     ports:
       - 27017:27017
     environment:
-      MONGO_INITDB_DATABASE: barber_turn
-      MONGO_INITDB_ROOT_USERNAME: barber_turn_root
-      MONGO_INITDB_ROOT_PASSWORD: root_12345
+      MONGO_INITDB_DATABASE: barberTurn
+      MONGO_INITDB_ROOT_USERNAME: barber_turn
+      MONGO_INITDB_ROOT_PASSWORD: barber_12345
   api:
     build: .
     environment:
