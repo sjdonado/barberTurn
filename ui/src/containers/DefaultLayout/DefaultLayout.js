@@ -26,6 +26,7 @@ import ShoppingCartIcon from '@material-ui/icons/ShoppingCart';
 import PeopleIcon from '@material-ui/icons/People';
 import CameraRollIcon from '@material-ui/icons/CameraRoll';
 import ExitToAppIcon from '@material-ui/icons/ExitToApp';
+import StarRateIcon from '@material-ui/icons/StarRate';
 // import SimpleLineChart from '../../components/SimpleLineChart';
 
 import routes from '../../routes';
@@ -67,6 +68,7 @@ const styles = theme => ({
   menuButton: {
     marginLeft: 12,
     marginRight: 36,
+    cursor: 'pointer',
   },
   menuButtonHidden: {
     display: 'none',
@@ -112,9 +114,6 @@ const styles = theme => ({
   },
   menu: {
     marginTop: '47px',
-  },
-  menuButton: {
-    cursor: 'pointer',
   },
   avatar: {
     marginRight: 10,
@@ -264,6 +263,14 @@ class DefaultLayout extends Component {
                         <PeopleIcon />
                       </ListItemIcon>
                       <ListItemText primary="Clientes"/>
+                    </ListItem>
+                  </Link>
+                  <Link to="/dashboard/feedbacks">
+                    <ListItem button>
+                      <ListItemIcon>
+                        <StarRateIcon />
+                      </ListItemIcon>
+                      <ListItemText primary="Calificaciones"/>
                     </ListItem>
                   </Link>
                 </div>

@@ -5,7 +5,7 @@ const product = (state = null, action) => {
     case 'REMOVE_PRODUCT':
       return null
     default:
-      return state
+      return state;
   };
 }
 

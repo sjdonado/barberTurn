@@ -137,9 +137,11 @@ exports.qualify = async (req, res, next) => {
 
 exports.companyCustomers = async (req, res, next) => {
   const {
+    doc,
     user,
   } = req;
 
+  console.log('doc', req);
   try {
     const products = await Product.find({ user: user.id });
     const data = await Model

@@ -3,23 +3,10 @@ import PropTypes from 'prop-types';
 import { withStyles } from '@material-ui/core/styles';
 import TextField from '@material-ui/core/TextField';
 import Button from '@material-ui/core/Button';
-import IconButton from '@material-ui/core/IconButton';
 import Fab from '@material-ui/core/Fab';
 import AddShoppingCartIcon from '@material-ui/icons/AddShoppingCart';
-import CloseIcon from '@material-ui/icons/Close';
 import SimpleSnackbar from './SimpleSnackbar';
 import ProductCard from './ProductCard';
-
-function rand() {
-  return Math.round(Math.random() * 200) - 100;
-}
-
-function getCardStyle() {
-  const width = 300 + rand();
-  return {
-    maxWidth: `${width}px`,
-  };
-}
 
 const styles = theme => ({
   root: {

@@ -125,7 +125,7 @@ class ProductCardQR extends Component {
         <Divider variant="middle" />
         <div className={classes.section2}>
           {
-            this.state.userProduct.status == 'new' ? (
+            this.state.userProduct.status === 'new' ? (
               <Button
                 fullWidth
                 onClick={this.handleShowQrModal}
@@ -136,7 +136,7 @@ class ProductCardQR extends Component {
             ) : (
               <Button
                 fullWidth
-                disabled={this.state.userProduct.status != 'accepted'}
+                disabled={this.state.userProduct.status !== 'accepted'}
                 onClick={this.handleShowQualifiyModal}
                 variant="contained"
                 color="primary">

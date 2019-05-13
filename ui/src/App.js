@@ -4,7 +4,6 @@ import { Route, Switch, BrowserRouter, Redirect } from 'react-router-dom';
 import './App.css';
 import { Login, SignUp, Landing } from './pages/';
 
-import Requests from './services/requests';
 import DefaultLayout from './containers/DefaultLayout';
 
 class App extends Component {

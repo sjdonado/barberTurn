@@ -40,12 +40,18 @@ const CompanyCustomers = Loadable({
   loading: Loading,
 });
 
+const Feedbacks = Loadable({
+  loader: () => import('./pages/Feedbacks'),
+  loading: Loading,
+});
+
 // https://github.com/ReactTraining/react-router/tree/master/packages/react-router-config
 const routes = [
   { path: '/profile', exact: true, name: 'My profile', component: MyProfile },
   { path: '/dashboard', exact: true, role: true, name: 'Dashboard', component: Dashboard },
   { path: '/dashboard/register', exact: true, role: true, name: 'QR register', component: QrRegister },
   { path: '/dashboard/customers', exact: true, role: true, name: 'QR register', component: CompanyCustomers },
+  { path: '/dashboard/feedbacks', exact: true, role: true, name: 'Feedbacks', component: Feedbacks },
   { path: '/home', exact: true, role: false, name: 'Home', component: Home },
   { path: '/home/products', exact: true, role: false, name: 'My products', component: CustomerProducts },
 ];

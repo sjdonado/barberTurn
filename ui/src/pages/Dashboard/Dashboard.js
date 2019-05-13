@@ -193,6 +193,8 @@ class Dashboard extends Component {
             if (updatedProduct.data) this.setState({ products, file: null });
             this.props.removeProduct();
             break;
+          default:
+            break;
         }
       } catch (e) {
         console.log(e);
@@ -228,7 +230,9 @@ class Dashboard extends Component {
               {/* <Divider variant="middle" fullWidth/> */}
               { this.state.viewProduct ? <ProductCard product={this.state.viewProduct} /> :
                 <div>
-                  <img className={classes.bigAvatar} src={this.state.product.coverPicture.url || this.state.fileUrl} />
+                  <img className={classes.bigAvatar}
+                    src={this.state.product.coverPicture.url || this.state.fileUrl}
+                    alt="Avatar" />
                   <form className={classes.container} autoComplete="off" onSubmit={this.handleSubmit}>
                     <input
                       id="file-input"

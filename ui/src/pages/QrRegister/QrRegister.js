@@ -98,7 +98,7 @@ class QrRegister extends Component {
               <Divider variant="middle" />
               <div className={classes.section2}>
                 <Button
-                  disabled={this.state.userProduct.status != 'new'}
+                  disabled={this.state.userProduct.status !== 'new'}
                   fullWidth
                   onClick={this.handleAcceptClick}
                   variant="contained"
@@ -108,7 +108,7 @@ class QrRegister extends Component {
               </div>
               <div className={classes.section2}>
                 <Button
-                  disabled={this.state.userProduct.status != 'new'}
+                  disabled={this.state.userProduct.status !== 'new'}
                   fullWidth
                   onClick={this.handleRejectClick}
                   variant="contained"

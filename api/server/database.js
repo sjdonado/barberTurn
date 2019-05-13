@@ -7,9 +7,11 @@ const {
 } = config;
 
 exports.connect = () => {
-  mongoose.connect(database.url, { useNewUrlParser: true });
+  if (mongoose.connection.readyState === 0) {
+    mongoose.connect(database.url, { useNewUrlParser: true });
 
-  mongoose.connection.on('open', () => {
-    console.log('Database connected');
-  });
+    mongoose.connection.on('open', () => {
+      console.log('Database connected');
+    });
+  }
 };

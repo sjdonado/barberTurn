@@ -1,11 +1,11 @@
 const user = (state = null, action) => {
   switch (action.type) {
     case 'SAVE_USER':
-      return action.user
+      return action.user;
     case 'REMOVE_USER':
-      return null
+      return null;
     default:
-      return state
+      return state;
   };
 }
 

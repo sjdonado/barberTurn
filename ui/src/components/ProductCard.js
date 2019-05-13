@@ -25,7 +25,9 @@ class ProductCard extends Component {
     const { classes, product, secondaryText } = this.props;
     return (
       <div>
-        <img className={classes.coverImg} src={product.coverPicture.url} />
+        <img className={classes.coverImg}
+        src={product.coverPicture.url}
+        alt="Cover" />
         <div className={classes.container}>
           <Grid container alignItems="center">
             <Grid item xs>

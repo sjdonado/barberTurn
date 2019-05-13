@@ -45,7 +45,9 @@ class CompanyCard extends Component {
     const { classes, company } = this.props;
     return (
       <div className={classes.item} onClick={this.handleCompanyClick}>
-        <img className={classes.coverImg} src={company.profilePicture.url} />
+        <img className={classes.coverImg}
+        src={company.profilePicture.url}
+        alt="Cover" />
         <div className={classes.container}>
           <Typography className={classes.name} gutterBottom variant="h5">
             {company.name}

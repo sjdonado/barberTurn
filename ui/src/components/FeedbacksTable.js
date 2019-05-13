@@ -13,16 +13,9 @@ import TableSortLabel from '@material-ui/core/TableSortLabel';
 import Toolbar from '@material-ui/core/Toolbar';
 import Typography from '@material-ui/core/Typography';
 import Paper from '@material-ui/core/Paper';
-import Checkbox from '@material-ui/core/Checkbox';
-import IconButton from '@material-ui/core/IconButton';
 import Tooltip from '@material-ui/core/Tooltip';
-import InfoIcon from '@material-ui/icons/Info';
-import EditIcon from '@material-ui/icons/Edit';
-import DeleteIcon from '@material-ui/icons/Delete';
 import { lighten } from '@material-ui/core/styles/colorManipulator';
-
-import { saveProduct } from '../actions';
-
+import StarRatingComponent from 'react-star-rating-component';
 
 function desc(a, b, orderBy) {
   if (b[orderBy] < a[orderBy]) {
@@ -49,13 +42,12 @@ function getSorting(order, orderBy) {
 }
 
 const rows = [
-  { id: 'name', numeric: false, disablePadding: true, label: 'Nombre' },
-  { id: 'description', numeric: false, disablePadding: true, label: 'Descripción' },
-  { id: 'quantity', numeric: true, disablePadding: true, label: 'Cantidad' },
-  { id: 'price', numeric: true, disablePadding: true, label: 'Precio' },
+  { id: 'client', numeric: false, disablePadding: true, label: 'Cliente' },
+  { id: 'message', numeric: false, disablePadding: true, label: 'Mensaje' },
+  { id: 'value', numeric: true, disablePadding: true, label: 'Calificación' },
 ];
 
-class EnhancedTableHead extends React.Component {
+class FeedbacksTableHead extends React.Component {
   createSortHandler = property => event => {
     this.props.onRequestSort(event, property);
   };
@@ -66,7 +58,6 @@ class EnhancedTableHead extends React.Component {
     return (
       <TableHead>
         <TableRow>
-          <TableCell padding="checkbox" />
           {rows.map(
             row => (
               <TableCell
@@ -95,7 +86,7 @@ class EnhancedTableHead extends React.Component {
   }
 }
 
-EnhancedTableHead.propTypes = {
+FeedbacksTableHead.propTypes = {
   onRequestSort: PropTypes.func.isRequired,
   order: PropTypes.string.isRequired,
   orderBy: PropTypes.string.isRequired,
@@ -129,8 +120,8 @@ const toolbarStyles = theme => ({
   },
 });
 
-let EnhancedTableToolbar = props => {
-  const { selected, selectedName, classes, handleViewProduct, handleEditProduct, handleDeleteProduct } = props;
+let FeedbacksTableToolbar = props => {
+  const { selected, selectedName, classes } = props;
   return (
     <Toolbar
       className={classNames(classes.root, {
@@ -143,42 +134,21 @@ let EnhancedTableToolbar = props => {
           </Typography>
         ) : (
           <Typography variant="h5" id="tableTitle">
-            Productosz
+            Calificaciones
           </Typography>
         )}
       </div>
       <div className={classes.spacer} />
-      <div className={classes.actions}>
-        {selected !== -1 ? (
-          <div className={classes.actionsButtons}>
-            <Tooltip title="View">
-              <IconButton aria-label="Ver" onClick={handleViewProduct}>
-                <InfoIcon />
-              </IconButton>
-            </Tooltip>
-            <Tooltip title="Edit">
-              <IconButton aria-label="Editar" onClick={handleEditProduct}>
-                <EditIcon />
-              </IconButton>
-            </Tooltip>
-            <Tooltip title="Delete">
-              <IconButton aria-label="Eliminar" onClick={handleDeleteProduct}>
-                <DeleteIcon />
-              </IconButton>
-            </Tooltip>
-          </div>
-        ) : (null)}
-      </div>
     </Toolbar>
   );
 };
 
-EnhancedTableToolbar.propTypes = {
+FeedbacksTableToolbar.propTypes = {
   classes: PropTypes.object.isRequired,
   selected: PropTypes.number.isRequired,
 };
 
-EnhancedTableToolbar = withStyles(toolbarStyles)(EnhancedTableToolbar);
+FeedbacksTableToolbar = withStyles(toolbarStyles)(FeedbacksTableToolbar);
 
 const styles = theme => ({
   root: {
@@ -193,7 +163,7 @@ const styles = theme => ({
   // },
 });
 
-class EnhancedTable extends React.Component {
+class FeedbacksTable extends React.Component {
 
   state = {
     order: 'asc',
@@ -249,7 +219,7 @@ class EnhancedTable extends React.Component {
 
     return (
       <Paper className={classes.root}>
-        <EnhancedTableToolbar 
+        <FeedbacksTableToolbar 
           selected={selected}
           handleViewProduct={handleViewProduct}
           handleEditProduct={handleEditProduct}
@@ -257,7 +227,7 @@ class EnhancedTable extends React.Component {
           selectedName={this.selectedName(selected)}/>
         <div className={classes.tableWrapper}>
           <Table className={classes.table} aria-labelledby="tableTitle">
-            <EnhancedTableHead
+            <FeedbacksTableHead
               selected={selected}
               order={order}
               orderBy={orderBy}
@@ -270,22 +240,17 @@ class EnhancedTable extends React.Component {
                   const isSelected = this.isSelected(this.props.data.indexOf(n));
                   return (
                     <TableRow
-                      hover
-                      onClick={event => this.handleClick(event, n)}
-                      role="checkbox"
-                      aria-checked={isSelected}
                       tabIndex={-1}
-                      key={n._id}
-                      selected={isSelected}>
-                      <TableCell padding="checkbox">
-                        <Checkbox checked={isSelected} />
+                      key={n._id}>
+                      <TableCell component="th" scope="row" align="left">{n.client.name}</TableCell>
+                      <TableCell align="left">{n.message}</TableCell>
+                      <TableCell align="right">
+                        <StarRatingComponent 
+                          name="rate" 
+                          editing={false}
+                          starCount={5}
+                          value={n.rating} />
                       </TableCell>
-                      <TableCell component="th" scope="row">
-                        {n.name}
-                      </TableCell>
-                      <TableCell align="left">{n.description}</TableCell>
-                      <TableCell align="right">{n.quantity}</TableCell>
-                      <TableCell align="right">{n.price}</TableCell>
                     </TableRow>
                   );
                 })}
@@ -304,10 +269,10 @@ class EnhancedTable extends React.Component {
           rowsPerPage={rowsPerPage}
           page={page}
           backIconButtonProps={{
-            'aria-label': 'Previous Page',
+            'aria-label': 'Página anterior',
           }}
           nextIconButtonProps={{
-            'aria-label': 'Next Page',
+            'aria-label': 'Página siguiente',
           }}
           onChangePage={this.handleChangePage}
           onChangeRowsPerPage={this.handleChangeRowsPerPage}
@@ -317,7 +282,7 @@ class EnhancedTable extends React.Component {
   }
 }
 
-EnhancedTable.propTypes = {
+FeedbacksTable.propTypes = {
   classes: PropTypes.object.isRequired,
 };
 
@@ -325,11 +290,6 @@ const mapStateToProps = (state, ownProps) => ({
   product: state.product,
 });
 
-const mapDispatchToProps = {
-  saveProduct,
-};
-
 export default connect(
   mapStateToProps,
-  mapDispatchToProps,
-)(withStyles(styles)(EnhancedTable));
+)(withStyles(styles)(FeedbacksTable));

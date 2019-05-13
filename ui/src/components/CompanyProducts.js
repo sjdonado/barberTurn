@@ -36,7 +36,7 @@ class CompanyProducts extends Component {
 
   handleSubmit = async product => {
     try {
-      const res = await create(product);
+      await create(product);
     } catch(e) {
       console.log(e);
     }
