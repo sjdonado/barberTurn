@@ -27,6 +27,7 @@ import PeopleIcon from '@material-ui/icons/People';
 import CameraRollIcon from '@material-ui/icons/CameraRoll';
 import ExitToAppIcon from '@material-ui/icons/ExitToApp';
 import StarRateIcon from '@material-ui/icons/StarRate';
+import Hidden from '@material-ui/core/Hidden';
 // import SimpleLineChart from '../../components/SimpleLineChart';
 
 import routes from '../../routes';
@@ -40,8 +41,12 @@ const styles = theme => ({
   root: {
     display: 'flex',
   },
-  toolbar: {
-    paddingRight: 24, // keep right padding when drawer closed
+  
+  drawer: {
+    [theme.breakpoints.up('sm')]: {
+      width: drawerWidth,
+      flexShrink: 0,
+    },
   },
   toolbarIcon: {
     display: 'flex',
@@ -51,50 +56,30 @@ const styles = theme => ({
     ...theme.mixins.toolbar,
   },
   appBar: {
-    zIndex: theme.zIndex.drawer + 1,
-    transition: theme.transitions.create(['width', 'margin'], {
-      easing: theme.transitions.easing.sharp,
-      duration: theme.transitions.duration.leavingScreen,
-    }),
-  },
-  appBarShift: {
     marginLeft: drawerWidth,
-    width: `calc(100% - ${drawerWidth}px)`,
-    transition: theme.transitions.create(['width', 'margin'], {
-      easing: theme.transitions.easing.sharp,
-      duration: theme.transitions.duration.enteringScreen,
-    }),
+    [theme.breakpoints.up('sm')]: {
+      width: `calc(100% - ${drawerWidth}px)`,
+    },
   },
-  menuButton: {
-    marginLeft: 12,
-    marginRight: 36,
-    cursor: 'pointer',
-  },
-  menuButtonHidden: {
+  profileButton: {
     display: 'none',
   },
   title: {
     flexGrow: 1,
-  },
-  drawerPaper: {
-    position: 'relative',
-    whiteSpace: 'nowrap',
-    width: drawerWidth,
-    transition: theme.transitions.create('width', {
-      easing: theme.transitions.easing.sharp,
-      duration: theme.transitions.duration.enteringScreen,
-    }),
-  },
-  drawerPaperClose: {
-    overflowX: 'hidden',
-    transition: theme.transitions.create('width', {
-      easing: theme.transitions.easing.sharp,
-      duration: theme.transitions.duration.leavingScreen,
-    }),
-    width: theme.spacing.unit * 7,
     [theme.breakpoints.up('sm')]: {
-      width: theme.spacing.unit * 9,
+      marginLeft: 20,
     },
+  },
+  menuButton: {
+    marginRight: 20,
+    cursor: 'pointer',
+    [theme.breakpoints.up('sm')]: {
+      display: 'none',
+    },
+  },
+  toolbar: theme.mixins.toolbar,
+  drawerPaper: {
+    width: drawerWidth,
   },
   appBarSpacer: theme.mixins.toolbar,
   content: {
@@ -117,12 +102,17 @@ const styles = theme => ({
   },
   avatar: {
     marginRight: 10,
-  }
+  },
+  profileButton: {
+    marginLeft: 12,
+    marginRight: 36,
+    cursor: 'pointer',
+  },
 });
 
 class DefaultLayout extends Component {
   state = {
-    open: true,
+    open: false,
     anchorEl: null,
   };
 
@@ -132,6 +122,10 @@ class DefaultLayout extends Component {
 
   handleDrawerClose = () => {
     this.setState({ open: false });
+  };
+
+  handleDrawerToggle = () => {
+    this.setState(state => ({ open: !state.open }));
   };
 
   handleMenuClick = event => {
@@ -157,24 +151,103 @@ class DefaultLayout extends Component {
   redirectByRole = () => this.props.user.role ? <Redirect from="/" to="/dashboard" /> : <Redirect from="/" to="/home" />
 
   render() {
-    const { classes, user } = this.props;
+    const { classes, user, theme } = this.props;
+    const drawer = (
+      <div>
+        <div className={classes.toolbarIcon}>
+          <Typography
+            style={{ paddingLeft: '16px', flexGrow: 1 }}
+            component="h1"
+            variant="h6"
+            color="inherit"
+            noWrap >
+            BarberTurn
+          </Typography>
+          <IconButton onClick={this.handleDrawerClose}
+            className={classes.menuButton}>
+            <ChevronLeftIcon />
+          </IconButton>
+        </div>
+        <Divider />
+        <List>
+          {user.role ? (
+            <div className="sidebar-buttons">
+              <Link to="/dashboard">
+                <ListItem button>
+                  <ListItemIcon>
+                    <HomeIcon />
+                  </ListItemIcon>
+                  <ListItemText primary="Inicio"/>
+                </ListItem>
+              </Link>
+              <Link to="/dashboard/register">
+                <ListItem button>
+                  <ListItemIcon>
+                    <CameraRollIcon />
+                  </ListItemIcon>
+                  <ListItemText primary="Registrar QR"/>
+                </ListItem>
+              </Link>
+              <Link to="/dashboard/customers">
+                <ListItem button>
+                  <ListItemIcon>
+                    <PeopleIcon />
+                  </ListItemIcon>
+                  <ListItemText primary="Clientes"/>
+                </ListItem>
+              </Link>
+              <Link to="/dashboard/feedbacks">
+                <ListItem button>
+                  <ListItemIcon>
+                    <StarRateIcon />
+                  </ListItemIcon>
+                  <ListItemText primary="Calificaciones"/>
+                </ListItem>
+              </Link>
+            </div>
+            ) : (
+            <div>
+              <Link to="/home">
+                <ListItem button>
+                  <ListItemIcon>
+                    <HomeIcon />
+                  </ListItemIcon>
+                  <ListItemText primary="Inicio"/>
+                </ListItem>
+              </Link>
+              <Link to="/home/products">
+                <ListItem button>
+                  <ListItemIcon>
+                    <ShoppingCartIcon />
+                  </ListItemIcon>
+                  <ListItemText primary="Mis promociones"/>
+                </ListItem>
+              </Link>
+            </div>
+          )}
+          {/* <ListItem button>
+            <ListItemIcon>
+              <ExitToAppIcon />
+            </ListItemIcon>
+            <ListItemText primary="Cerrar sesión" onClick={this.handleLogout}/>
+          </ListItem> */}
+        </List>
+      </div>
+    );
     return (
       <Router>
         <div className={classes.root}>
           <CssBaseline />
           <AppBar
-            position="absolute"
-            className={classNames(classes.appBar, this.state.open && classes.appBarShift)}>
+            position="fixed"
+            className={classNames(classes.appBar)}>
             <Toolbar disableGutters={!this.state.open} className={classes.toolbar}>
               <IconButton
                 color="inherit"
                 aria-label="Open drawer"
-                onClick={this.handleDrawerOpen}
-                className={classNames(
-                  classes.menuButton,
-                  this.state.open && classes.menuButtonHidden,
-                )}>
-              <MenuIcon />
+                onClick={this.handleDrawerToggle}
+                className={classes.menuButton}>
+                <MenuIcon />
               </IconButton>
               <Typography
                 className={classes.title}
@@ -188,7 +261,7 @@ class DefaultLayout extends Component {
               <Typography
                 component="h2"
                 color="inherit"
-                className={classes.menuButton}
+                className={classes.profileButton}
                 aria-owns={this.state.anchorEl ? 'simple-menu' : undefined}
                 aria-haspopup="true"
                 onClick={this.handleMenuClick}
@@ -202,7 +275,7 @@ class DefaultLayout extends Component {
                 onClose={this.handleMenuClose}>
                 {/* <MenuItem onClick={this.handleMenuClose}>Profile</MenuItem> */}
                 <MenuItem onClick={this.handleMenuClose}>
-                  <Link to="/profile">
+                  <Link to="/profile" className="link-button">
                     <List>
                       <ListItem>
                         <ListItemIcon>
@@ -226,82 +299,33 @@ class DefaultLayout extends Component {
               </Menu>
             </Toolbar>
           </AppBar>
-          <Drawer
-            variant="permanent"
-            classes={{
-              paper: classNames(classes.drawerPaper, !this.state.open && classes.drawerPaperClose),
-            }}
-            open={this.state.open}>
-            <div className={classes.toolbarIcon}>
-              <IconButton onClick={this.handleDrawerClose}>
-                <ChevronLeftIcon />
-              </IconButton>
-            </div>
-            <Divider />
-            <List>
-              {user.role ? (
-                <div>
-                  <Link to="/dashboard">
-                    <ListItem button>
-                      <ListItemIcon>
-                        <HomeIcon />
-                      </ListItemIcon>
-                      <ListItemText primary="Inicio"/>
-                    </ListItem>
-                  </Link>
-                  <Link to="/dashboard/register">
-                    <ListItem button>
-                      <ListItemIcon>
-                        <CameraRollIcon />
-                      </ListItemIcon>
-                      <ListItemText primary="Registrar QR"/>
-                    </ListItem>
-                  </Link>
-                  <Link to="/dashboard/customers">
-                    <ListItem button>
-                      <ListItemIcon>
-                        <PeopleIcon />
-                      </ListItemIcon>
-                      <ListItemText primary="Clientes"/>
-                    </ListItem>
-                  </Link>
-                  <Link to="/dashboard/feedbacks">
-                    <ListItem button>
-                      <ListItemIcon>
-                        <StarRateIcon />
-                      </ListItemIcon>
-                      <ListItemText primary="Calificaciones"/>
-                    </ListItem>
-                  </Link>
-                </div>
-                ) : (
-                <div>
-                  <Link to="/home">
-                    <ListItem button>
-                      <ListItemIcon>
-                        <HomeIcon />
-                      </ListItemIcon>
-                      <ListItemText primary="Inicio"/>
-                    </ListItem>
-                  </Link>
-                  <Link to="/home/products">
-                    <ListItem button>
-                      <ListItemIcon>
-                        <ShoppingCartIcon />
-                      </ListItemIcon>
-                      <ListItemText primary="Mis promociones"/>
-                    </ListItem>
-                  </Link>
-                </div>
-              )}
-              {/* <ListItem button>
-                <ListItemIcon>
-                  <ExitToAppIcon />
-                </ListItemIcon>
-                <ListItemText primary="Cerrar sesión" onClick={this.handleLogout}/>
-              </ListItem> */}
-            </List>
-          </Drawer>
+          <nav className={classes.drawer}>          
+            <Hidden smUp implementation="css">
+              <Drawer
+                container={this.props.container}
+                variant="temporary"
+                anchor="left"
+                open={this.state.open}
+                onClose={this.handleDrawerToggle}
+                classes={{
+                  paper: classes.drawerPaper,
+                }}
+              >
+                {drawer}
+              </Drawer>
+            </Hidden>
+            <Hidden xsDown implementation="css">
+              <Drawer
+                classes={{
+                  paper: classes.drawerPaper,
+                }}
+                variant="permanent"
+                open
+              >
+                {drawer}
+              </Drawer>
+            </Hidden>
+          </nav>
           <main className={classes.content}>
             <Switch>
               {routes.map((route, idx) => {

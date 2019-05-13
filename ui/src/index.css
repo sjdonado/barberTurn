@@ -25,3 +25,7 @@ code {
 div#root {
   height: 100%;
 }
+
+div.sidebar-buttons > a, .link-button {
+  text-decoration: none;
+}
