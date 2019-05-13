@@ -225,7 +225,7 @@ class Dashboard extends Component {
                 <CloseIcon />
               </IconButton>
               <Typography variant="h4" className={classes.modalTitle}>
-                {this.state.viewProduct ? 'Detalles' : this.state.createOrUpdateModalType === 'create' ? 'Nuevo producto': 'Editar producto'}
+                {this.state.viewProduct ? 'Detalles' : this.state.createOrUpdateModalType === 'create' ? 'Nueva promoción': 'Editar promoción'}
               </Typography>
               {/* <Divider variant="middle" fullWidth/> */}
               { this.state.viewProduct ? <ProductCard product={this.state.viewProduct} /> :
@@ -267,6 +267,7 @@ class Dashboard extends Component {
                         value={this.state.product.price}
                         onChange={this.handleProductChange('price')}
                         margin="normal"
+                        style={{marginRight: '1em'}}
                         InputProps={{
                           startAdornment: <InputAdornment position="start">$</InputAdornment>,
                       }}/>

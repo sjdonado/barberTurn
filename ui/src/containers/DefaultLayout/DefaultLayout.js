@@ -289,7 +289,7 @@ class DefaultLayout extends Component {
                       <ListItemIcon>
                         <ShoppingCartIcon />
                       </ListItemIcon>
-                      <ListItemText primary="Mis productos"/>
+                      <ListItemText primary="Mis promociones"/>
                     </ListItem>
                   </Link>
                 </div>

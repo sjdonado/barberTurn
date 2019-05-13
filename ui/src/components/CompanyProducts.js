@@ -53,7 +53,7 @@ class CompanyProducts extends Component {
         </main>
       ) : (
         <Typography className={classes.message} gutterBottom variant="h6">
-          No se han encontrado productos.
+          No se han encontrado promociones.
         </Typography>
       )
     )
