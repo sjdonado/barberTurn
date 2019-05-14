@@ -52,6 +52,9 @@ class CompanyCard extends Component {
           <Typography className={classes.name} gutterBottom variant="h5">
             {company.name}
           </Typography>
+          <Typography color="textSecondary">
+            Horas: {company.startTime} - {company.endTime}
+          </Typography>
         </div>
       </div>
     )

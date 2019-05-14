@@ -26,9 +26,6 @@ const fields = {
   nit: {
     type: String,
   },
-  basePrice: {
-    type: Number,
-  },
   startTime: {
     type: String,
     default: '08:00',

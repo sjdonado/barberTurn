@@ -105,7 +105,6 @@ class MyProfile extends Component {
     e.preventDefault();
     console.log('USER', this.state.user);
     const formData = new FormData();
-    formData.append('basePrice', this.state.user.basePrice);
     formData.append('startTime', `${new Date(this.state.user.startTime).getHours()}:${new Date(this.state.user.startTime).getMinutes()}`);
     formData.append('endTime', `${new Date(this.state.user.endTime).getHours()}:${new Date(this.state.user.endTime).getMinutes()}`);
     try {
@@ -200,10 +199,6 @@ class MyProfile extends Component {
         { this.state.user.role && <main className={classes.main}>
           <Paper className={classes.paper}>
             <form className={classes.form} onSubmit={this.sumbitCompanyConfigs} >
-              <FormControl margin="normal" fullWidth>
-                <InputLabel htmlFor="basePrice">Precio base</InputLabel>
-                <Input id="basePrice" name="basePrice" value={this.state.user.basePrice} onChange={this.handleInputChange} autoFocus />
-              </FormControl>
               <div className={classes.root}>
                 <MuiPickersUtilsProvider utils={DateFnsUtils}>
                   <Grid container className={classes.grid} justify="space-around">
@@ -225,7 +220,6 @@ class MyProfile extends Component {
                 </MuiPickersUtilsProvider>
               </div>
               <Button
-                disabled={this.state.user.basePrice == null}
                 type="submit"
                 fullWidth
                 variant="contained"

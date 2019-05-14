@@ -35,15 +35,10 @@ class PromotionCard extends Component {
                 {promotion.name}
               </Typography>
             </Grid>
-            <Grid item>
-              <Typography gutterBottom variant="subtitle1">
-                ${promotion.price}
-              </Typography>
-            </Grid>
           </Grid>
           {/* <Qualify quantity={promotion.qualify.quantity} users={promotion.qualify.users} /> */}
           {promotion.quantity > 0 ? (
-            <Typography color="textSecondary">{ secondaryText }</Typography>
+            <Typography color="textSecondary">Cantidad disponible: {promotion.quantity}</Typography>
           ) : (
             <Typography color="textSecondary">Promoción agotada</Typography>
           )}

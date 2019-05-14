@@ -18,10 +18,6 @@ const fields = {
     type: Number,
     required: true,
   },
-  price: {
-    type: Number,
-    required: true,
-  },
   coverPicture: {
     key: {
       type: String,

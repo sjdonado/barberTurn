@@ -63,7 +63,7 @@ class CompanyPromotions extends Component {
 
   componentWillReceiveProps(nextProps) {
     if (nextProps.selected !== this.state.selected) {
-      if (nextProps.selected == null && this.state.index != null) {
+      if (nextProps.selected == null && nextProps.promotionSent && this.state.index != null) {
         Object.assign(this.state.promotions[this.state.index], { quantity: this.state.promotions[this.state.index].quantity - 1});
       }
       this.setState({ selected: nextProps.selected });
@@ -81,9 +81,8 @@ class CompanyPromotions extends Component {
 
   select = async (promotion, index) => {
     if (promotion.quantity > 0) {
-      const selected = promotion;
-      this.setState({ selected, index });
-      this.props.clickListener(selected);
+      this.setState({ selected: promotion, index });
+      this.props.clickListener(promotion);
     }
   }
 
@@ -93,8 +92,8 @@ class CompanyPromotions extends Component {
       this.state.promotions.length > 0 ? (
         <main className={classes.content}>
           {this.state.promotions.map((n, idx )=> (
-            <div className={this.state.selected == n._id ? classes.selected : n.quantity == 0 ? classes.spent : classes.available} key={n._id} onClick={()=> this.select(n, idx)}>
-              <PromotionCard className={classes.card} promotion={n} secondaryText={`Cantidad disponible: ${n.quantity}`}/>
+            <div className={this.state.selected == n ? classes.selected : n.quantity == 0 ? classes.spent : classes.available} key={n._id} onClick={()=> this.select(n, idx)}>
+              <PromotionCard className={classes.card} promotion={n}/>
             </div>
             // <PromotionCardForm  promotion={n}  handleSubmit={this.handleSubmit}/>
           ))}

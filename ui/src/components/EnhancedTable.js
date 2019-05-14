@@ -52,7 +52,6 @@ const rows = [
   { id: 'name', numeric: false, disablePadding: true, label: 'Nombre' },
   { id: 'description', numeric: false, disablePadding: true, label: 'Descripción' },
   { id: 'quantity', numeric: true, disablePadding: true, label: 'Cantidad' },
-  { id: 'price', numeric: true, disablePadding: true, label: 'Precio' },
 ];
 
 class EnhancedTableHead extends React.Component {
@@ -285,7 +284,6 @@ class EnhancedTable extends React.Component {
                       </TableCell>
                       <TableCell align="left">{n.description}</TableCell>
                       <TableCell align="right">{n.quantity}</TableCell>
-                      <TableCell align="right">{n.price}</TableCell>
                     </TableRow>
                   );
                 })}

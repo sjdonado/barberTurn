@@ -115,6 +115,7 @@ class Home extends Component {
     createTurnModalOpen: false,
     snackbarMessage: null,
     promotion: null,
+    promotionSent: false,
     turn: Object.assign({}, initialTurn),
   };
 
@@ -146,20 +147,30 @@ class Home extends Component {
   };
 
   handleTurnChange = prop => event => {
-    this.setState({ turn: Object.assign(this.state.turn, { [prop]: event.target.value }) });
+    this.setState({ turn: Object.assign(this.state.turn, { [prop]: event.target.value }), snackbarMessage: null });
   };
 
   handleSubmit = async e => {
     e.preventDefault();
-    try {
-      console.log()
-      await createTurn(Object.assign(this.state.turn, { company: this.state.company.id, promotion: this.state.promotion._id }));
-      this.setState({ snackbarMessage: 'Turno guardado correctamente!' });
-    } catch(e) {
-      console.log(e);
-      this.setState({ snackbarMessage: 'Error al crear el turno' });
+
+    const selectedDate = new Date(this.state.turn.selectedDate);
+    const selectedDateParsed = new Date(0, 0, 0, selectedDate.getHours(), selectedDate.getMinutes());
+    const startTime = new Date(0, 0, 0, this.state.company.startTime.split(':')[0], this.state.company.startTime.split(':')[1]);
+    const endTime = new Date(0, 0, 0, this.state.company.endTime.split(':')[0], this.state.company.endTime.split(':')[1]);
+
+    if (selectedDateParsed.getTime() > startTime.getTime() && selectedDateParsed.getTime() < endTime.getTime()) {
+      try {
+        console.log()
+        await createTurn(Object.assign(this.state.turn, { company: this.state.company.id, promotion: this.state.promotion._id }));
+        this.setState({ snackbarMessage: 'Turno guardado correctamente!', promotionSent: true });
+      } catch(e) {
+        console.log(e);
+        this.setState({ snackbarMessage: 'Error al crear el turno' });
+      }
+      this.handleClose();
+    } else {
+      this.setState({ snackbarMessage: `La barbería sólo se encuentra disponible en el intervalo: ${this.state.company.startTime}-${this.state.company.endTime}`});
     }
-    this.handleClose();
   }
 
   handleClose = () => {
@@ -170,12 +181,15 @@ class Home extends Component {
     });
   };
 
+  handleOpen = () => {
+    this.setState({ createTurnModalOpen: true, snackbarMessage: null });
+  }
+
   handleDateChange = date => {
-    this.setState({ turn: Object.assign(this.state.turn, { selectedDate: date } )});
+    this.setState({ turn: Object.assign(this.state.turn, { selectedDate: date } ), snackbarMessage: null });
   };
 
   promotionClickListener = promotion => {
-    console.log('promotion', promotion);
     this.setState({ createTurnModalOpen: true, promotion })
   }
 
@@ -204,7 +218,7 @@ class Home extends Component {
             </div> */}
           </div>
           <CompanyPromotions company={this.state.company} selected={this.state.promotion} clickListener={this.promotionClickListener} />
-          <Fab color="primary" aria-label="Nuevo turno" className={classes.fab} onClick={() => this.setState({ createTurnModalOpen: true })}>
+          <Fab color="primary" aria-label="Nuevo turno" className={classes.fab} onClick={this.handleOpen}>
             <AddShoppingCartIcon />
           </Fab>
           <Modal

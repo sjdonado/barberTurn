@@ -90,7 +90,6 @@ const styles = theme => ({
 const initialPromotion = {
   name: '',
   description: '',
-  price: '',
   quantity: '',
   sending: false,
   coverPicture: {
@@ -172,7 +171,6 @@ class Dashboard extends Component {
       formData.append('file', this.state.file, this.state.file.name)
       formData.append('name', this.state.promotion.name);
       formData.append('description', this.state.promotion.description);
-      formData.append('price', this.state.promotion.price);
       formData.append('quantity', this.state.promotion.quantity);
       try {
         switch (this.state.createOrUpdateModalType) {
@@ -253,34 +251,19 @@ class Dashboard extends Component {
                       variant="outlined"
                       value={this.state.promotion.description}
                       onChange={this.handlePromotionChange('description')}/>
-                    <div className={classes.rowParent}>
-                      <TextField
-                        required
-                        id="outlined-promotion-price"
-                        className={classes.middleTextField}
-                        variant="outlined"
-                        label="Precio"
-                        value={this.state.promotion.price}
-                        onChange={this.handlePromotionChange('price')}
-                        margin="normal"
-                        style={{marginRight: '1em'}}
-                        InputProps={{
-                          startAdornment: <InputAdornment position="start">$</InputAdornment>,
-                      }}/>
-                      <TextField
-                        required
-                        id="outlined-number-quantity"
-                        label="Cantidad"
-                        value={this.state.promotion.quantity}
-                        onChange={this.handlePromotionChange('quantity')}
-                        type="number"
-                        className={classes.middleTextField}
-                        InputLabelProps={{
-                          shrink: true,
-                        }}
-                        margin="normal"
-                        variant="outlined"/>
-                    </div>
+                    <TextField
+                      required
+                      id="outlined-number-quantity"
+                      label="Cantidad"
+                      value={this.state.promotion.quantity}
+                      onChange={this.handlePromotionChange('quantity')}
+                      type="number"
+                      className={classes.middleTextField}
+                      InputLabelProps={{
+                        shrink: true,
+                      }}
+                      margin="normal"
+                      variant="outlined"/>
                     <Button
                       type="submit"
                       disabled={this.state.sending}
