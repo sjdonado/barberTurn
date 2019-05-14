@@ -53,7 +53,7 @@ exports.companyPromotions = async (req, res, next) => {
   } = req;
 
   Model
-    .find({ user: user.id })
+    .find({ user: user.getId() })
     .populate(referencesNames.join(' '))
     .then((data) => {
       res.json({
@@ -94,7 +94,7 @@ exports.create = async (req, res, next) => {
     const s3Data = await uploadFile(files.file);
     const document = new Model(
       Object.assign(body, {
-        user: user.id,
+        user: user.getId(),
         coverPicture: { key: s3Data.key, url: s3Data.Location },
       }),
     );

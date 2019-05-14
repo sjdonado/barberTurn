@@ -7,9 +7,9 @@ import Divider from '@material-ui/core/Divider';
 import Button from '@material-ui/core/Button';
 import QrReader from "react-qr-reader";
 
-import { get, setStatus } from '../../services/userPromotionsService';
+import { get, setStatus } from '../../services/turnsService';
 import SimpleSnackbar from '../../components/SimpleSnackbar';
-import PromotionCard from '../../components/PromotionCard';
+import TurnCard from '../../components/TurnCard';
 
 const styles = theme => ({
   root: {
@@ -39,7 +39,7 @@ class QrRegister extends Component {
     delay: 1000,
     openSnackbar: false,
     snackbarMessage: null,
-    userPromotion: null,
+    turn: null,
   };
   
   handleScan = async id => {
@@ -50,7 +50,7 @@ class QrRegister extends Component {
         this.setState({
           openSnackbar: true,
           snackbarMessage: `Lectura registrada correctamente`,
-          userPromotion: res.data,
+          turn: res.data,
         });
       } catch(e) {
         console.log(e);
@@ -59,15 +59,29 @@ class QrRegister extends Component {
   }
 
   handleAcceptClick = async () => {
-    const res = await setStatus(this.state.userPromotion._id, { status: 'accepted' });
-    this.setState({ userPromotion: Object.assign(this.state.userPromotion, { status: res.status }) });
-    console.log(res);
+    try {
+      const res = await setStatus(this.state.turn._id, { status: 'accepted' });
+      this.setState({ 
+        turn: Object.assign(this.state.turn, { status: res.status }),
+        snackbarMessage: 'Turno aceptado correctamente',
+       });
+    } catch(err) {
+      console.log(err);
+      this.setState({ snackbarMessage: 'Error al aceptar el turno :(' });
+    }
   };
 
   handleRejectClick = async () => {
-    const res = await setStatus(this.state.userPromotion._id, { status: 'rejected' });
-    this.setState({ userPromotion: Object.assign(this.state.userPromotion, { status: res.status }) });
-    console.log(res);
+    try {
+      const res = await setStatus(this.state.turn._id, { status: 'rejected' });
+      this.setState({
+        turn: Object.assign(this.state.turn, { status: res.status }),
+        snackbarMessage: 'Turno rechazado correctamente',
+      });
+    } catch(err) {
+      console.log(err);
+      this.setState({ snackbarMessage: 'Error al rechazar el turno :(' });
+    }
   };
 
   handleError = err => {
@@ -79,7 +93,7 @@ class QrRegister extends Component {
     return (
       <main className={classes.root}>
         <Typography variant="h4" gutterBottom component="h2">
-          Registrar QR
+          Registrar turno
         </Typography>
         <div className={classes.content}>
           <div className={classes.cameraDiv}>
@@ -90,15 +104,13 @@ class QrRegister extends Component {
               style={{ width: "100%" }}
             />
           </div>
-          { this.state.userPromotion ? 
+          { this.state.turn ? 
             <div className={classes.card}>
-              <PromotionCard
-                promotion={this.state.userPromotion.promotion}
-                secondaryText={`Cantidad disponible: ${this.state.userPromotion.quantity}`}/>
+              <TurnCard turn={this.state.turn} user={true} />
               <Divider variant="middle" />
               <div className={classes.section2}>
                 <Button
-                  disabled={this.state.userPromotion.status !== 'new'}
+                  disabled={this.state.turn.status !== 'new'}
                   fullWidth
                   onClick={this.handleAcceptClick}
                   variant="contained"
@@ -108,7 +120,7 @@ class QrRegister extends Component {
               </div>
               <div className={classes.section2}>
                 <Button
-                  disabled={this.state.userPromotion.status !== 'new'}
+                  disabled={this.state.turn.status !== 'new'}
                   fullWidth
                   onClick={this.handleRejectClick}
                   variant="contained"

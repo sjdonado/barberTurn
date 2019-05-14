@@ -28,7 +28,7 @@ exports.all = async (req, res, next) => {
     user,
   } = req;
   Model
-    .find({ business: user.id })
+    .find({ business: user.getId() })
     .populate(referencesNames[0])
     .then((data) => {
       res.json({
@@ -46,10 +46,10 @@ exports.create = async (req, res, next) => {
     user,
   } = req;
   try {
-    const feedback = await Model.findOne({ client: user.id });
+    const feedback = await Model.findOne({ client: user.getId() });
     if (!feedback) {
       const document = new Model(Object.assign(body,
-        { client: user.id, business: body.businessId }));
+        { client: user.getId(), business: body.businessId }));
       const data = await document.save();
       res.status(201);
       res.json({

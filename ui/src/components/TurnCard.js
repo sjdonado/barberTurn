@@ -3,6 +3,7 @@ import PropTypes from 'prop-types';
 import { withStyles } from '@material-ui/core/styles';
 import Grid from '@material-ui/core/Grid';
 import Typography from '@material-ui/core/Typography';
+import moment from 'moment';
 
 import Qualify from './Qualify';
 
@@ -19,34 +20,34 @@ const styles = theme => ({
   }
 });
 
-class PromotionCard extends Component {
+class TurnCard extends Component {
 
   render() {
-    const { classes, promotion, secondaryText } = this.props;
+    const { classes, turn, user } = this.props;
     return (
       <div>
         <img className={classes.coverImg}
-        src={promotion.coverPicture.url}
-        alt="Cover" />
+          src={user ? turn.user.profilePicture.url : turn.company.profilePicture.url}
+          alt="Cover" />
         <div className={classes.container}>
           <Grid container alignItems="center">
             <Grid item xs>
               <Typography gutterBottom variant="h5">
-                {promotion.name}
+                {user ? turn.user.name : turn.company.name}
               </Typography>
             </Grid>
             <Grid item>
               <Typography gutterBottom variant="subtitle1">
-                ${promotion.price}
+                {moment(turn.selectedDate).format('LLLL')}
               </Typography>
             </Grid>
           </Grid>
-          {/* <Qualify quantity={promotion.qualify.quantity} users={promotion.qualify.users} /> */}
-          <Typography color="textSecondary">
+          <Qualify quantity={turn.qualify} />
+          {/* <Typography color="textSecondary">
             { secondaryText }
-          </Typography>
+          </Typography> */}
           <Typography color="textSecondary">
-            {promotion.description}
+            {turn.description}
           </Typography>
         </div>
       </div>
@@ -54,8 +55,8 @@ class PromotionCard extends Component {
   }
 }
 
-PromotionCard.propTypes = {
+TurnCard.propTypes = {
   classes: PropTypes.object.isRequired,
 };
 
-export default withStyles(styles)(PromotionCard);
+export default withStyles(styles)(TurnCard);

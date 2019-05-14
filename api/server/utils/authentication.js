@@ -51,7 +51,7 @@ passport.use(new UniqueTokenStrategy(
 ));
 
 passport.serializeUser((user, done) => {
-  done(null, user.id);
+  done(null, user.getId());
 });
 
 passport.deserializeUser((id, done) => {

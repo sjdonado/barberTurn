@@ -17,6 +17,8 @@ import InputLabel from '@material-ui/core/InputLabel';
 import SimpleSnackbar from '../../components/SimpleSnackbar';
 import Link from '@material-ui/core/Link';
 import Switch from '@material-ui/core/Switch';
+import LinearProgress from '@material-ui/core/LinearProgress';
+
 import './SignUp.scss';
 
 import Utils from '../../utils';
@@ -143,12 +145,10 @@ class SignUp extends Component {
         console.log('res', res, res.data)
         this.props.saveUser(res.data);
       } catch (e) {
-        this.setState({snackbarMessage: 'El usuario ya existe'});
+        this.setState({snackbarMessage: 'El usuario ya existe', sending: false });
         console.log(e);
       }
     }
-
-    this.setState({ sending: false });
   }
 
   login = () => {

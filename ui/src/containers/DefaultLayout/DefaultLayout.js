@@ -185,7 +185,7 @@ class DefaultLayout extends Component {
                   <ListItemIcon>
                     <CameraRollIcon />
                   </ListItemIcon>
-                  <ListItemText primary="Registrar QR"/>
+                  <ListItemText primary="Registrar turno"/>
                 </ListItem>
               </Link>
               <Link to="/dashboard/customers">
@@ -193,17 +193,17 @@ class DefaultLayout extends Component {
                   <ListItemIcon>
                     <PeopleIcon />
                   </ListItemIcon>
-                  <ListItemText primary="Clientes"/>
+                  <ListItemText primary="Historial"/>
                 </ListItem>
               </Link>
-              <Link to="/dashboard/feedbacks">
+              {/* <Link to="/dashboard/feedbacks">
                 <ListItem button>
                   <ListItemIcon>
                     <StarRateIcon />
                   </ListItemIcon>
                   <ListItemText primary="Calificaciones"/>
                 </ListItem>
-              </Link>
+              </Link> */}
             </div>
             ) : (
             <div>

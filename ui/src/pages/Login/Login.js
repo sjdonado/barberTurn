@@ -95,10 +95,9 @@ class Login extends Component {
       console.log('res', res, res.data)
       this.props.saveUser(res.data);
     } catch (e) {
-      this.setState({snackbarMessage: 'Correo no valido'});
+      this.setState({snackbarMessage: 'Correo no valido', sending: false });
       console.log(e);
     }
-    this.setState({ sending: false });
   }
 
   signUp = () => {

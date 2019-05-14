@@ -14,7 +14,7 @@ const styles = theme => ({
 class Qualify extends Component {
 
   render() {
-    const { classes, quantity, users } = this.props;
+    const { classes, quantity } = this.props;
     return (
       <Grid container alignItems="center">
         <Grid item>
@@ -22,10 +22,10 @@ class Qualify extends Component {
             name="rate" 
             editing={false}
             starCount={5}
-            value={quantity / users === 0 ? 1 : users}
+            value={quantity}
           />
         </Grid>
-        <Grid item className={classes.margin}>
+        {/* <Grid item className={classes.margin}>
           <Typography gutterBottom variant="caption">
             { Math.round((quantity / users === 0 ? 1 : users) * 100) / 100 }
           </Typography>
@@ -34,7 +34,7 @@ class Qualify extends Component {
           <Typography gutterBottom variant="caption">
             ({users})
           </Typography>
-        </Grid>
+        </Grid> */}
       </Grid>
     )
   }

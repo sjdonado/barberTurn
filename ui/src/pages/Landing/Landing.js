@@ -157,7 +157,7 @@ class Landing extends Component {
               </div>
               <div>
                 <MonetizationOnIcon />
-                <span>Aprovecha los cupones y descuentos que tenemos para ti</span>
+                <span>Aprovecha las promociones que tenemos para ti</span>
               </div>
             </div>
           </Features>
@@ -194,7 +194,7 @@ class Landing extends Component {
                   <div className="content">
                     <img src={gMobileUserI} style={{height: '120px', marginBottom: '20px'}} alt="Google Mobile User"></img>
                     <Typography align="center" style={{color: '#616161'}}>
-                      Pide un turno o aprovecha un cupón y comienza a disfrutar
+                      Pide un turno y comienza a disfrutar
                     </Typography>
                   </div>
                 </CardContent>

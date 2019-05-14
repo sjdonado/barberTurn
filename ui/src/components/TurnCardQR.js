@@ -9,10 +9,11 @@ import IconButton from '@material-ui/core/IconButton';
 import CloseIcon from '@material-ui/icons/Close';
 import Typography from '@material-ui/core/Typography';
 import StarRatingComponent from 'react-star-rating-component';
+import SimpleSnackbar from './SimpleSnackbar';
 
-import PromotionCard from './PromotionCard';
+import TurnCard from './TurnCard';
 import { Card } from '../styles/index';
-import { setQualify } from '../services/userPromotionsService';
+import { setQualify } from '../services/turnsService';
 
 
 const styles = theme => ({
@@ -58,7 +59,8 @@ class TurnCardQR extends Component {
     openQR: false,
     openQualify: false,
     qualify: 0,
-    userPromotion: this.props.userPromotion,
+    snackbarMessage: null,
+    turn: this.props.turn,
   };
 
   handleShowQrModal = () => {
@@ -75,7 +77,7 @@ class TurnCardQR extends Component {
       const a = document.createElement('a');
       document.body.appendChild(a);
       a.style.display = 'none';
-      a.download = `${this.state.userPromotion.promotion.name}-qr-code.png`;
+      a.download = `barberturn-${this.state.turn.company.name}-${this.state.turn.selectedDate}-qr-code.png`;
       const url = window.URL.createObjectURL(b);
       a.href = url;
       a.click();
@@ -86,17 +88,21 @@ class TurnCardQR extends Component {
   }
 
   handleQualify = async () => {
-    const res = await setQualify(this.state.userPromotion._id, { qualify: this.state.qualify });
-    this.setState({ openQualify: false, userPromotion: Object.assign(this.state.userPromotion, {
-      promotion: Object.assign(this.state.userPromotion.promotion, {
-        qualify: {
-          quantity: this.state.userPromotion.promotion.qualify.quantity + this.state.qualify,
-          users: this.state.userPromotion.promotion.qualify.users + 1,
-        },
-      }),
-    })});
+    try {
+      const res = await setQualify(this.state.turn._id, { qualify: this.state.qualify });
+      const { qualify, status } = res.data;
+      this.setState({ 
+        snackbarMessage: 'Calificación enviada correctamente',
+        turn: Object.assign(this.state.turn, {
+          qualify,
+          status,
+        }),
+      });
+    } catch (err) {
+      console.log(err);
+      this.setState({ snackbarMessage: 'Calificación enviada correctamente' });
+    }
     this.handleCloseQualifyModal();
-    console.log('quailfy res', res);
   }
 
   onStarClick = qualify => {
@@ -116,11 +122,11 @@ class TurnCardQR extends Component {
     const { classes } = this.props;
     return (
       <div className={classes.root}>
-        {/* <PromotionCard promotion={this.state.userPromotion.promotion} secondaryText={`Cantidad seleccionada: ${this.state.userPromotion.quantity}`}/> */}
+        <TurnCard turn={this.state.turn} user={false} />
         <Divider variant="middle" />
         <div className={classes.section2}>
           {
-            this.state.userPromotion.status === 'new' ? (
+            this.state.turn.status === 'new' ? (
               <Button
                 fullWidth
                 onClick={this.handleShowQrModal}
@@ -131,7 +137,7 @@ class TurnCardQR extends Component {
             ) : (
               <Button
                 fullWidth
-                disabled={this.state.userPromotion.status !== 'accepted'}
+                disabled={this.state.turn.status !== 'accepted'}
                 onClick={this.handleShowQualifiyModal}
                 variant="contained"
                 color="primary">
@@ -141,15 +147,15 @@ class TurnCardQR extends Component {
           }
         </div>
         <Modal
-          aria-labelledby="promotion-modal-title"
-          aria-describedby="promotion-modal-description"
+          aria-labelledby="turn-modal-title"
+          aria-describedby="turn-modal-description"
           open={this.state.openQualify}
           onClose={this.handleCloseQualifyModal}>
           <div className={classes.paper}>
             <IconButton className={classes.topRightIcon} aria-label="Close" onClick={this.handleCloseQualifyModal}>
               <CloseIcon />
             </IconButton>
-            <Typography variant="h4" className={classes.modalTitle}>Tú calificación</Typography>
+            <Typography variant="h4" className={classes.modalTitle}>Tu calificación</Typography>
             <StarRatingComponent 
               className={classes.rating}
               name="qualify" 
@@ -167,8 +173,8 @@ class TurnCardQR extends Component {
           </div>
         </Modal>
         <Modal
-          aria-labelledby="promotion-modal-title"
-          aria-describedby="promotion-modal-description"
+          aria-labelledby="turn-modal-title"
+          aria-describedby="turn-modal-description"
           open={this.state.openQR}
           onClose={this.handleCloseQrModal}>
           <div className={classes.paper}>
@@ -176,7 +182,7 @@ class TurnCardQR extends Component {
               <CloseIcon />
             </IconButton>
             <Typography variant="h4" className={classes.modalTitle}>Código QR</Typography>
-            <QRCode id="qrCode" value={this.state.userPromotion._id} className={classes.qrCode}/>
+            <QRCode id="qrCode" value={this.state.turn._id} className={classes.qrCode}/>
             <Button
               fullWidth
               onClick={this.handleDownloadQr}
@@ -186,6 +192,7 @@ class TurnCardQR extends Component {
             </Button>
           </div>
         </Modal>
+        <SimpleSnackbar open={this.state.snackbarMessage != null} message={this.state.snackbarMessage}/>
       </div>
     )
   }

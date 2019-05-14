@@ -7,6 +7,7 @@ const {
 } = require('./model');
 
 const { Promotion } = require('../promotions/controller');
+const { Turn } = require('../turns/controller');
 
 const referencesNames = [
   ...Object.getOwnPropertyNames(references),
@@ -32,7 +33,7 @@ exports.all = async (req, res, next) => {
     user,
   } = req;
   Model
-    .find({ user: user.id })
+    .find({ user: user.getId() })
     .populate(referencesNames[1])
     .then((data) => {
       res.json({
@@ -50,8 +51,8 @@ exports.create = async (req, res, next) => {
     user,
   } = req;
   try {
-    const document = new Model(Object.assign(body, { user: user.id, promotion: body.promotionId }));
-    const data = await document.save();
+    const doc = new Model(Object.assign(body, { user: user.getId(), promotion: body.promotionId }));
+    const data = await doc.save();
     const promotion = await Promotion.findById(body.promotionId);
     Object.assign(promotion, { quantity: promotion.quantity - body.quantity });
     await promotion.save();
@@ -92,61 +93,18 @@ exports.read = async (req, res, next) => {
   }
 };
 
-exports.status = async (req, res, next) => {
-  const {
-    doc,
-    body,
-  } = req;
-  const statusIndex = STATUS.indexOf(body.status);
-  if (statusIndex !== -1) {
-    Object.assign(doc, { status: statusIndex });
-    const data = await doc.save();
-    res.status(200);
-    res.json({
-      data,
-    });
-  } else {
-    next(new Error('Bad request'));
-  }
-};
-
-exports.qualify = async (req, res, next) => {
-  const {
-    doc,
-    body,
-  } = req;
-  const { qualify } = body;
-  if (doc.status === 1) {
-    const promotion = await Promotion.findOne({ _id: doc.promotion });
-    await promotion.update(Object.assign(promotion, {
-      qualify: {
-        quantity: promotion.qualify.quantity + qualify,
-        users: promotion.qualify.users + 1,
-      },
-    }));
-    Object.assign(doc, { status: 3, qualify });
-    const data = await doc.save();
-    res.status(200);
-    res.json({
-      data,
-    });
-  } else {
-    next(new Error('Bad request'));
-  }
-};
-
 exports.companyCustomers = async (req, res, next) => {
   const {
     doc,
     user,
   } = req;
 
-  console.log('doc', req);
   try {
-    const promotions = await Promotion.find({ user: user.id });
-    const data = await Model
+    console.log('USER -->', user);
+
+    const data = await Turn
       .find({
-        promotion: { $in: promotions.map(promotion => promotion._id) },
+        company: user.getId(),
       })
       .populate(referencesNames[1], '-_id -user')
       .populate(referencesNames[0], '-_id -password');
