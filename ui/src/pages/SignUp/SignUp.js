@@ -17,11 +17,7 @@ import InputLabel from '@material-ui/core/InputLabel';
 import SimpleSnackbar from '../../components/SimpleSnackbar';
 import Link from '@material-ui/core/Link';
 import Switch from '@material-ui/core/Switch';
-<<<<<<< HEAD
-import LinearProgress from '@material-ui/core/LinearProgress';
-=======
 import './SignUp.scss';
->>>>>>> 041b197b3837c3671242c5619afbcdaeb07570e9
 
 import Utils from '../../utils';
 import { create, createGoogleOauth } from '../../services/usersService';
