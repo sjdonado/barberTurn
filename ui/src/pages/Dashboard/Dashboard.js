@@ -113,7 +113,6 @@ class Dashboard extends Component {
   async componentWillMount() {
     try {
       const res = await getAllByBusiness();
-      console.log(res.data)
       this.setState({ promotions: res.data.reverse() });
     } catch(e) {
       console.log(e);
@@ -151,7 +150,6 @@ class Dashboard extends Component {
   handleDeletePromotion = async event => {
     try {
       const res = await remove(this.props.promotion._id);
-      console.log(res, res.data._id);
       if (res.data) this.setState({ promotions: this.state.promotions.filter(elem => elem._id !== res.data._id)});
       this.props.removePromotion();
     } catch (e) {
@@ -247,7 +245,6 @@ class Dashboard extends Component {
                       value={this.state.promotion.name}
                       onChange={this.handlePromotionChange('name')}/>
                     <TextField
-                      required
                       id="outlined-textarea-description"
                       label="Descripción"
                       multiline

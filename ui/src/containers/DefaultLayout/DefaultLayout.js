@@ -140,7 +140,6 @@ class DefaultLayout extends Component {
     this.setState({ anchorEl: null });
     try {
       const res = await logout();
-      console.log('res', res, res.data)
       this.props.removeUser();
     } catch (e) {
       this.setState({snackbarMessage: 'Usuario no authorizado'});

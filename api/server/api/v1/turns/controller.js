@@ -54,11 +54,11 @@ exports.create = async (req, res, next) => {
 
   try {
     const params = { user: user.getId() };
-    if (body.promotionId) {
-      const promotion = await Promotion.findById(body.promotionId);
-      Object.assign(promotion, { quantity: promotion.quantity - body.quantity });
-      await promotion.save();
-      Object.assign(params, { promotion: body.promotionId });
+    if (body.promotion) {
+      const promotionDoc = await Promotion.findById(body.promotion);
+      Object.assign(promotionDoc, { quantity: promotionDoc.quantity - 1 });
+      await promotionDoc.save();
+      Object.assign(params, { promotion: promotionDoc });
     }
     const document = new Model(Object.assign(body, params));
     const data = await document.save();
@@ -77,26 +77,11 @@ exports.read = async (req, res, next) => {
     user,
   } = req;
   try {
-    const params = {};
-    if (doc.promotion) {
-      const promotion = await Promotion.findById(doc.promotion);
-      if (user.getId().toString() === promotion.user.toString()) {
-        // Object.assign(doc, { verified: true });
-        // const data = await doc.save();
-        Object.assign(params, { promotion });
-      } else {
-        next(new Error('Bad request'));
-      }
-    }
+    if (user.getId().toString() !== doc.company.toString()) new Error('Bad request');
+
     res.json({
-      data: Object.assign(doc, params),
+      data: doc,
     });
-    // if (!doc.verified) {
-    // } else {
-    //   res.json({
-    //     data: Object.assign(doc, { promotion }),
-    //   });
-    // }
   } catch (e) {
     next(e);
   }

@@ -9,6 +9,9 @@ import FormControl from '@material-ui/core/FormControl';
 import Input from '@material-ui/core/Input';
 import InputLabel from '@material-ui/core/InputLabel';
 import SimpleSnackbar from '../../components/SimpleSnackbar';
+import Grid from '@material-ui/core/Grid';
+import DateFnsUtils from '@date-io/date-fns';
+import { MuiPickersUtilsProvider, TimePicker, DatePicker } from 'material-ui-pickers';
 
 import Utils from '../../utils';
 import { update } from '../../services/usersService';
@@ -16,6 +19,9 @@ import { update } from '../../services/usersService';
 import { saveUser } from '../../actions';
 
 const styles = theme => ({
+  root: {
+    display: 'flex',
+  },
   main: {
     width: 'auto',
     display: 'block', // Fix IE 11 issue.
@@ -63,6 +69,10 @@ const styles = theme => ({
 });
 
 class MyProfile extends Component {
+  constructor(props) {
+    console.log('uSER', props.user);
+    super(props);
+  }
   state = {
     file: null,
     fileUrl: null,
@@ -76,16 +86,49 @@ class MyProfile extends Component {
     if (this.state.file) formData.append('file', this.state.file, this.state.file.name);
     formData.append('name', e.target.name.value);
     formData.append('email', e.target.email.value);
+    formData.append('password', e.target.password.value);
     try {
       const res = await update(formData);
-      console.log('res', res, res.data)
+      Object.assign(res.data, {
+        startTime: new Date(0, 0, 0, res.data.startTime.split(':')[0], res.data.startTime.split(':')[1]),
+        endTime: new Date(0, 0, 0, res.data.endTime.split(':')[0], res.data.endTime.split(':')[1]),
+      });
       this.props.saveUser(res.data);
-      this.setState({snackbarMessage: 'Usuario actualizado correctamente'});
+      this.setState({snackbarMessage: 'Usuario actualizado correctamente.'});
     } catch (e) {
-      this.setState({snackbarMessage: 'Error al actualizar el usuario'});
+      this.setState({snackbarMessage: 'Error al actualizar el usuario.'});
       console.log(e);
     }
   }
+
+  sumbitCompanyConfigs = async (e) => {
+    e.preventDefault();
+    console.log('USER', this.state.user);
+    const formData = new FormData();
+    formData.append('basePrice', this.state.user.basePrice);
+    formData.append('startTime', `${new Date(this.state.user.startTime).getHours()}:${new Date(this.state.user.startTime).getMinutes()}`);
+    formData.append('endTime', `${new Date(this.state.user.endTime).getHours()}:${new Date(this.state.user.endTime).getMinutes()}`);
+    try {
+      const res = await update(formData);
+      Object.assign(res.data, {
+        startTime: new Date(0, 0, 0, res.data.startTime.split(':')[0], res.data.startTime.split(':')[1]),
+        endTime: new Date(0, 0, 0, res.data.endTime.split(':')[0], res.data.endTime.split(':')[1]),
+      });
+      this.props.saveUser(res.data);
+      this.setState({snackbarMessage: 'Configuración actualizada correctamente.'});
+    } catch (e) {
+      this.setState({snackbarMessage: 'Error al actualizar la configuración.'});
+      console.log(e);
+    }
+  }
+
+  handleStartTimeDateChange = date => {
+    this.setState({ user: Object.assign(this.state.user, { startTime: date } )});
+  };
+
+  handleEndTimeDateChange = date => {
+    this.setState({ user: Object.assign(this.state.user, { endTime: date } )});
+  };
 
   onFileChange = e => {
     this.setState({ file: e.target.files[0] });
@@ -109,50 +152,92 @@ class MyProfile extends Component {
     console.log(this.state)
     const { classes } = this.props;
     return (
-      <main className={classes.main}>
-        <Paper className={classes.paper}>
-          <Avatar alt={this.state.user.name} src={this.state.fileUrl || this.state.user.profilePicture.url} className={classes.bigAvatar} />
-          <form className={classes.form} onSubmit={this.submit} >
-            <input
-              id="file-input"
-              type="file"
-              onChange={this.onFileChange} />
-            <FormControl margin="normal" required fullWidth>
-              <InputLabel htmlFor="name">Nombre</InputLabel>
-              <Input id="name" name="name" value={this.state.user.name} onChange={this.handleInputChange} autoFocus />
-            </FormControl>
-            {
-              this.state.user.role && 
-              (<FormControl margin="normal" required fullWidth>
-                <InputLabel htmlFor="nit">NIT</InputLabel>
-                <Input id="nit" name="nit" value={this.state.user.nit} onChange={this.handleInputChange} />
-              </FormControl>)
-            }
-            {
-              !this.state.user.googleAuth &&
-                <div>
-                  <FormControl margin="normal" required fullWidth>
-                    <InputLabel htmlFor="email">Email Address</InputLabel>
-                    <Input id="email" name="email" value={this.state.user.email} onChange={this.handleInputChange} />
-                  </FormControl>
-                  <FormControl margin="normal" fullWidth>
-                    <InputLabel htmlFor="password">Password</InputLabel>
-                    <Input name="password" type="password" id="password" />
-                  </FormControl>
-                </div>
-            }
-            <Button
-              type="submit"
-              fullWidth
-              variant="contained"
-              color="primary"
-              className={classes.submit}>
-              Guardar
-            </Button>
-          </form>
-        </Paper>
-        <SimpleSnackbar open={this.state.snackbarMessage != null} message={this.state.snackbarMessage}/>
-      </main>
+      <div className={classes.root}>
+        <main className={classes.main}>
+          <Paper className={classes.paper}>
+            <Avatar alt={this.state.user.name} src={this.state.fileUrl || this.state.user.profilePicture.url} className={classes.bigAvatar} />
+            <form className={classes.form} onSubmit={this.submit} >
+              <input
+                id="file-input"
+                type="file"
+                onChange={this.onFileChange} />
+              <FormControl margin="normal" required fullWidth>
+                <InputLabel htmlFor="name">Nombre</InputLabel>
+                <Input id="name" name="name" value={this.state.user.name} onChange={this.handleInputChange} autoFocus />
+              </FormControl>
+              {
+                this.state.user.role && 
+                (<FormControl margin="normal" required fullWidth>
+                  <InputLabel htmlFor="nit">NIT</InputLabel>
+                  <Input id="nit" name="nit" value={this.state.user.nit} onChange={this.handleInputChange} />
+                </FormControl>)
+              }
+              {
+                !this.state.user.googleAuth &&
+                  <div>
+                    <FormControl margin="normal" required fullWidth>
+                      <InputLabel htmlFor="email">Email Address</InputLabel>
+                      <Input id="email" name="email" value={this.state.user.email} onChange={this.handleInputChange} />
+                    </FormControl>
+                    <FormControl margin="normal" fullWidth>
+                      <InputLabel htmlFor="password">Password</InputLabel>
+                      <Input name="password" type="password" id="password" minLength="5" value={this.state.user.password} onChange={this.handleInputChange} />
+                    </FormControl>
+                  </div>
+              }
+              <Button
+                type="submit"
+                fullWidth
+                variant="contained"
+                color="primary"
+                className={classes.submit}>
+                Guardar
+              </Button>
+            </form>
+          </Paper>
+          <SimpleSnackbar open={this.state.snackbarMessage != null} message={this.state.snackbarMessage}/>
+        </main>
+        { this.state.user.role && <main className={classes.main}>
+          <Paper className={classes.paper}>
+            <form className={classes.form} onSubmit={this.sumbitCompanyConfigs} >
+              <FormControl margin="normal" fullWidth>
+                <InputLabel htmlFor="basePrice">Precio base</InputLabel>
+                <Input id="basePrice" name="basePrice" value={this.state.user.basePrice} onChange={this.handleInputChange} autoFocus />
+              </FormControl>
+              <div className={classes.root}>
+                <MuiPickersUtilsProvider utils={DateFnsUtils}>
+                  <Grid container className={classes.grid} justify="space-around">
+                    <TimePicker
+                      margin="normal"
+                      label="Hora de apertura"
+                      value={this.state.user.startTime}
+                      onChange={this.handleStartTimeDateChange}/>
+                  </Grid>
+                </MuiPickersUtilsProvider>
+                <MuiPickersUtilsProvider utils={DateFnsUtils}>
+                  <Grid container className={classes.grid} justify="space-around">
+                    <TimePicker
+                      margin="normal"
+                      label="Hora de cierre"
+                      value={this.state.user.endTime}
+                      onChange={this.handleEndTimeDateChange}/>
+                  </Grid>
+                </MuiPickersUtilsProvider>
+              </div>
+              <Button
+                disabled={this.state.user.basePrice == null}
+                type="submit"
+                fullWidth
+                variant="contained"
+                color="primary"
+                className={classes.submit}>
+                Guardar
+              </Button>
+            </form>
+          </Paper>
+          <SimpleSnackbar open={this.state.snackbarMessage != null} message={this.state.snackbarMessage}/>
+        </main>}
+      </div>
     )
   }
 }

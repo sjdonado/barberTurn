@@ -100,8 +100,6 @@ exports.companyCustomers = async (req, res, next) => {
   } = req;
 
   try {
-    console.log('USER -->', user);
-
     const data = await Turn
       .find({
         company: user.getId(),

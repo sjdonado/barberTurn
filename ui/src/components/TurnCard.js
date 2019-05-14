@@ -27,7 +27,7 @@ class TurnCard extends Component {
     return (
       <div>
         <img className={classes.coverImg}
-          src={user ? turn.user.profilePicture.url : turn.company.profilePicture.url}
+          src={turn.promotion ? turn.promotion.coverPicture.url : user ? turn.user.profilePicture.url : turn.company.profilePicture.url}
           alt="Cover" />
         <div className={classes.container}>
           <Grid container alignItems="center">
@@ -40,12 +40,14 @@ class TurnCard extends Component {
               <Typography gutterBottom variant="subtitle1">
                 {moment(turn.selectedDate).format('LLLL')}
               </Typography>
+              {turn.promotion && (
+                <Typography gutterBottom variant="subtitle1">
+                  <b>Promoción:</b> { turn.promotion.name }
+                </Typography>
+              )}
             </Grid>
           </Grid>
           <Qualify quantity={turn.qualify} />
-          {/* <Typography color="textSecondary">
-            { secondaryText }
-          </Typography> */}
           <Typography color="textSecondary">
             {turn.description}
           </Typography>

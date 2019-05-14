@@ -67,7 +67,7 @@ class QrRegister extends Component {
        });
     } catch(err) {
       console.log(err);
-      this.setState({ snackbarMessage: 'Error al aceptar el turno :(' });
+      this.setState({ snackbarMessage: 'Error al aceptar el turno.' });
     }
   };
 
@@ -76,11 +76,11 @@ class QrRegister extends Component {
       const res = await setStatus(this.state.turn._id, { status: 'rejected' });
       this.setState({
         turn: Object.assign(this.state.turn, { status: res.status }),
-        snackbarMessage: 'Turno rechazado correctamente',
+        snackbarMessage: 'Turno rechazado correctamente.',
       });
     } catch(err) {
       console.log(err);
-      this.setState({ snackbarMessage: 'Error al rechazar el turno :(' });
+      this.setState({ snackbarMessage: 'Error al rechazar el turno.' });
     }
   };
 

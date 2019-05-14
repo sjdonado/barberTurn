@@ -95,6 +95,10 @@ exports.update = async (req, res, next) => {
   } = req;
 
   try {
+    console.log('BODY', body);
+    if (body.password !== user.password && body.password < 5) {
+      delete body.password;
+    }
     Object.assign(user, body);
     if (files && files.file) {
       if (user.profilePicture.key) await deleteFile(user.profilePicture.key);
@@ -102,7 +106,6 @@ exports.update = async (req, res, next) => {
       Object.assign(user, { profilePicture: { key: s3Data.key, url: s3Data.Location } });
     }
     const data = await user.save();
-    res.status(201);
     res.json({
       data,
     });

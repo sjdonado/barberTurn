@@ -49,7 +49,7 @@ class CustomerTurns extends Component {
             <div className={classes.content}>
               { !this.state.loading && (
                 <Typography variant="h4">
-                  No has selecionado turnos aún :(
+                  No has selecionado turnos aún.
                 </Typography>
               )}
             </div>

@@ -26,6 +26,17 @@ const fields = {
   nit: {
     type: String,
   },
+  basePrice: {
+    type: Number,
+  },
+  startTime: {
+    type: String,
+    default: '08:00',
+  },
+  endTime: {
+    type: String,
+    default: '18:00',
+  },
   profilePicture: {
     key: {
       type: String,

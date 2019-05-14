@@ -114,13 +114,13 @@ class Home extends Component {
     feedback: false,
     createTurnModalOpen: false,
     snackbarMessage: null,
+    promotion: null,
     turn: Object.assign({}, initialTurn),
   };
 
   async componentDidMount() {
     try {
       const res = await getCompanies();
-      console.log(res.data)
       this.setState({ companies: res.data.reverse() })
     } catch(e) {
       console.log(e);
@@ -153,11 +153,11 @@ class Home extends Component {
     e.preventDefault();
     try {
       console.log()
-      await createTurn(Object.assign(this.state.turn, { company: this.state.company.id }));
-      this.setState({ snackbarMessage: 'Turno guardado correctamente!',  });
+      await createTurn(Object.assign(this.state.turn, { company: this.state.company.id, promotion: this.state.promotion._id }));
+      this.setState({ snackbarMessage: 'Turno guardado correctamente!' });
     } catch(e) {
       console.log(e);
-      this.setState({ snackbarMessage: 'Error al crear el turno :(' });
+      this.setState({ snackbarMessage: 'Error al crear el turno' });
     }
     this.handleClose();
   }
@@ -165,6 +165,7 @@ class Home extends Component {
   handleClose = () => {
     this.setState({
       createTurnModalOpen: false,
+      promotion: null,
       turn: Object.assign({}, initialTurn),
     });
   };
@@ -172,6 +173,11 @@ class Home extends Component {
   handleDateChange = date => {
     this.setState({ turn: Object.assign(this.state.turn, { selectedDate: date } )});
   };
+
+  promotionClickListener = promotion => {
+    console.log('promotion', promotion);
+    this.setState({ createTurnModalOpen: true, promotion })
+  }
 
   render() {
     const { classes } = this.props;
@@ -197,7 +203,7 @@ class Home extends Component {
               </IconButton>
             </div> */}
           </div>
-          <CompanyPromotions company={this.state.company} />
+          <CompanyPromotions company={this.state.company} selected={this.state.promotion} clickListener={this.promotionClickListener} />
           <Fab color="primary" aria-label="Nuevo turno" className={classes.fab} onClick={() => this.setState({ createTurnModalOpen: true })}>
             <AddShoppingCartIcon />
           </Fab>
@@ -216,6 +222,11 @@ class Home extends Component {
                   Nuevo turno
                 </Typography>
                   <div>
+                    {this.state.promotion && (
+                      <Typography gutterBottom variant="subtitle1">
+                        <b>Promoción:</b> { this.state.promotion.name }
+                      </Typography>
+                    )}
                     <form className={classes.container} autoComplete="off" onSubmit={this.handleSubmit}>
                       <MuiPickersUtilsProvider utils={DateFnsUtils}>
                         <Grid container className={classes.grid} justify="space-around">
@@ -232,7 +243,6 @@ class Home extends Component {
                         </Grid>
                       </MuiPickersUtilsProvider>
                       <TextField
-                        required
                         id="outlined-textarea-comments"
                         label="Comentarios"
                         multiline

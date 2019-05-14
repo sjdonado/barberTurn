@@ -18,10 +18,8 @@ const styles = theme => ({
     display: 'flex',
   },
   content: {
-    marginTop: '50px',
+    marginTop: 50,
     padding: theme.spacing.unit * 3,
-    height: '100vh',
-    overflow: 'auto',
   },
   card: {
     alignItems: 'center',
@@ -43,8 +41,8 @@ class CompanyCustomers extends Component {
   async componentWillMount() {
     try {
       const res = await getCustomers();
-      console.log(res.data)
-      this.setState({ turns: res.data })
+      this.setState({ turns: res.data });
+      console.log('RES', this.state.turns.length );
     } catch(e) {
       console.log(e);
     }
@@ -53,32 +51,40 @@ class CompanyCustomers extends Component {
   render() {
     const { classes } = this.props;
     return (
-      <List className={classes.content}>
-        {this.state.turns.map((turn, index) => (
-          <ListItem className={classes.card} alignItems="flex-start" key={index}>
-            <ListItemAvatar>
-              <Avatar alt="Profile picture" src={turn.user.profilePicture.url} />
-            </ListItemAvatar>
-            <ListItemText
-              primary={turn.user.name}
-              secondary={
-                <React.Fragment>
-                  <Typography component="span" className={classes.inline} color="textPrimary">
-                    {moment(turn.selectedDate).format('LLLL')}
+      <div>
+        {this.state.turns.length > 0 ? (
+          <List className={classes.content}>
+            {this.state.turns.map((turn, index) => (
+              <ListItem className={classes.card} alignItems="flex-start" key={index}>
+                <ListItemAvatar>
+                  <Avatar alt="Profile picture" src={turn.user.profilePicture.url} />
+                </ListItemAvatar>
+                <ListItemText
+                  primary={turn.user.name}
+                  secondary={
+                    <React.Fragment>
+                      <Typography component="span" className={classes.inline} color="textPrimary">
+                        {moment(turn.selectedDate).format('LLLL')}
+                      </Typography>
+                      Promoción: {turn.promotion ? turn.promotion.name : 'Minguna'}
+                    </React.Fragment>
+                  }
+                />
+                <div className={classes.statusContainer}>
+                  <Typography component="span" className={classes.status} color="textPrimary">
+                    { turn.status == 'new' ? 'Nuevo' : turn.status == 'accepted' ? 'Aceptado' : turn.status == 'rejected' ? 'Rechazado' : 'Calificado' }
                   </Typography>
-                  Promoción: {turn.promotion ? turn.promotion.name : 'Minguna'}
-                </React.Fragment>
-              }
-            />
-            <div className={classes.statusContainer}>
-              <Typography component="span" className={classes.status} color="textPrimary">
-                { turn.status == 'new' ? 'Nuevo' : turn.status == 'accepted' ? 'Aceptado' : turn.status == 'rejected' ? 'Rechazado' : 'Calificado' }
-              </Typography>
-              {turn.status == 'qualified' && <Qualify quantity={turn.qualify} />}
-            </div>
-          </ListItem>
-        ))}
-      </List>
+                  {turn.status == 'qualified' && <Qualify quantity={turn.qualify} />}
+                </div>
+              </ListItem>
+            ))}
+          </List>
+          ) : (
+          <div className={classes.content}>
+            <Typography variant="h4">No tienes clientes aún.</Typography>
+          </div>
+        )}
+      </div>
     )
   }
 }

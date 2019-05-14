@@ -83,7 +83,6 @@ class Feedbacks extends Component {
   async componentWillMount() {
     try {
       const res = await getAll();
-      console.log(res.data)
       this.setState({ feedbacks: res.data.reverse() });
     } catch(e) {
       console.log(e);

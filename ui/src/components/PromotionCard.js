@@ -42,9 +42,11 @@ class PromotionCard extends Component {
             </Grid>
           </Grid>
           {/* <Qualify quantity={promotion.qualify.quantity} users={promotion.qualify.users} /> */}
-          <Typography color="textSecondary">
-            { secondaryText }
-          </Typography>
+          {promotion.quantity > 0 ? (
+            <Typography color="textSecondary">{ secondaryText }</Typography>
+          ) : (
+            <Typography color="textSecondary">Promoción agotada</Typography>
+          )}
           <Typography color="textSecondary">
             {promotion.description}
           </Typography>

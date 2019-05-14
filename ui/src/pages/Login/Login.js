@@ -73,6 +73,10 @@ class Login extends Component {
     try {
       const res = await loginGoogle({ token: response.accessToken });
       console.log('res', res, res.data);
+      Object.assign(res.data, {
+        startTime: new Date(0, 0, 0, res.data.startTime.split(':')[0], res.data.startTime.split(':')[1]),
+        endTime: new Date(0, 0, 0, res.data.endTime.split(':')[0], res.data.endTime.split(':')[1]),
+      });
       this.props.saveUser(res.data);
     } catch (e) {
       console.log(e);
@@ -93,6 +97,10 @@ class Login extends Component {
         password: e.target.password.value,
       });
       console.log('res', res, res.data)
+      Object.assign(res.data, {
+        startTime: new Date(0, 0, 0, res.data.startTime.split(':')[0], res.data.startTime.split(':')[1]),
+        endTime: new Date(0, 0, 0, res.data.endTime.split(':')[0], res.data.endTime.split(':')[1]),
+      });
       this.props.saveUser(res.data);
     } catch (e) {
       this.setState({snackbarMessage: 'Correo no valido', sending: false });

@@ -124,7 +124,10 @@ class SignUp extends Component {
         };
         if (this.state.role) Object.assign(data, { nit: e.target.nit.value, role: true });
         const res = await createGoogleOauth(data);
-        console.log('res', res, res.data)
+        Object.assign(res.data, {
+          startTime: new Date(0, 0, 0, res.data.startTime.split(':')[0], res.data.startTime.split(':')[1]),
+          endTime: new Date(0, 0, 0, res.data.endTime.split(':')[0], res.data.endTime.split(':')[1]),
+        });
         this.props.saveUser(res.data);
       } catch (e) {
         this.setState({ snackbarMessage: 'User already exists'});
@@ -142,7 +145,10 @@ class SignUp extends Component {
           formData.append('role', true);
         }
         const res = await create(formData);
-        console.log('res', res, res.data)
+        Object.assign(res.data, {
+          startTime: new Date(0, 0, 0, res.data.startTime.split(':')[0], res.data.startTime.split(':')[1]),
+          endTime: new Date(0, 0, 0, res.data.endTime.split(':')[0], res.data.endTime.split(':')[1]),
+        });
         this.props.saveUser(res.data);
       } catch (e) {
         this.setState({snackbarMessage: 'El usuario ya existe', sending: false });
