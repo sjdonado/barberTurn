@@ -1,6 +1,6 @@
 /* eslint no-underscore-dangle: 0 */
 const mongoose = require('mongoose');
-const Product = require('../products/model');
+const Promotion = require('../promotions/model');
 
 const {
   Schema,
@@ -25,20 +25,20 @@ const references = {
     ref: 'user',
     required: true,
   },
-  product: {
+  promotion: {
     type: Schema.Types.ObjectId,
-    ref: 'product',
+    ref: 'promotion',
     required: true,
   },
 };
 
 const STATUS = ['new', 'accepted', 'rejected', 'qualified'];
 
-const product = new Schema(Object.assign(fields, references), {
+const promotion = new Schema(Object.assign(fields, references), {
   timestamps: true,
 });
 
-product.methods.toJSON = function toJSON() {
+promotion.methods.toJSON = function toJSON() {
   const doc = this.toObject();
   doc.status = STATUS[this.status];
   delete doc.__v;
@@ -46,7 +46,7 @@ product.methods.toJSON = function toJSON() {
 };
 
 module.exports = {
-  Model: mongoose.model('userProducts', product),
+  Model: mongoose.model('userPromotions', promotion),
   fields,
   references,
   STATUS,

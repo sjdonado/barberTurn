@@ -19,34 +19,34 @@ const styles = theme => ({
   }
 });
 
-class ProductCard extends Component {
+class PromotionCard extends Component {
 
   render() {
-    const { classes, product, secondaryText } = this.props;
+    const { classes, promotion, secondaryText } = this.props;
     return (
       <div>
         <img className={classes.coverImg}
-        src={product.coverPicture.url}
+        src={promotion.coverPicture.url}
         alt="Cover" />
         <div className={classes.container}>
           <Grid container alignItems="center">
             <Grid item xs>
               <Typography gutterBottom variant="h5">
-                {product.name}
+                {promotion.name}
               </Typography>
             </Grid>
             <Grid item>
               <Typography gutterBottom variant="subtitle1">
-                ${product.price}
+                ${promotion.price}
               </Typography>
             </Grid>
           </Grid>
-          <Qualify quantity={product.qualify.quantity} users={product.qualify.users} />
+          <Qualify quantity={promotion.qualify.quantity} users={promotion.qualify.users} />
           <Typography color="textSecondary">
             { secondaryText }
           </Typography>
           <Typography color="textSecondary">
-            {product.description}
+            {promotion.description}
           </Typography>
         </div>
       </div>
@@ -54,8 +54,8 @@ class ProductCard extends Component {
   }
 }
 
-ProductCard.propTypes = {
+PromotionCard.propTypes = {
   classes: PropTypes.object.isRequired,
 };
 
-export default withStyles(styles)(ProductCard);
+export default withStyles(styles)(PromotionCard);

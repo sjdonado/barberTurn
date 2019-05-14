@@ -8,7 +8,7 @@ router
   .param('id', controller.id);
 
 router.route('/')
-  .get(isACompany, controller.companyProducts)
+  .get(isACompany, controller.companyPromotions)
   .post(isACompany, controller.create);
 
 router.get('/all', controller.all);

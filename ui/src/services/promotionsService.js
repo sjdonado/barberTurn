@@ -1,6 +1,6 @@
 import Requests from './requests';
 
-const PATH = '/products';
+const PATH = '/promotions';
 
 export function create(body) {
   return Requests.post(`${PATH}`, body);
@@ -18,6 +18,6 @@ export function getAllByBusiness() {
   return Requests.get(`${PATH}`);
 }
 
-export function getAllProducts(id) {
+export function getAllPromotions(id) {
   return Requests.get(`${PATH}/all?company=${id}`);
 }

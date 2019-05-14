@@ -15,6 +15,7 @@ import Input from '@material-ui/core/Input';
 import InputLabel from '@material-ui/core/InputLabel';
 import SimpleSnackbar from '../../components/SimpleSnackbar';
 import Link from '@material-ui/core/Link';
+import LinearProgress from '@material-ui/core/LinearProgress';
 
 import { GOOGLE_CLIENT_ID } from '../../config';
 import { login, loginGoogle } from '../../services/usersService';
@@ -60,6 +61,7 @@ class Login extends Component {
   state = {
     loginView: true,
     snackbarMessage: null,
+    sending: false,
   }
   
   responseGoogleSuccess = async (response) => {
@@ -70,7 +72,7 @@ class Login extends Component {
       this.props.saveUser(res.data);
     } catch (e) {
       console.log(e);
-      this.setState({snackbarMessage: 'Error al ingresar con google'});
+      this.setState({snackbarMessage: 'Usuario no encontrado'});
     }
   }
 
@@ -80,6 +82,7 @@ class Login extends Component {
 
   submit = async (e) => {
     e.preventDefault();
+    this.setState({ sending: true });
     try {
       const res = await login({ 
         email: e.target.email.value,
@@ -91,6 +94,7 @@ class Login extends Component {
       this.setState({snackbarMessage: 'Correo no valido'});
       console.log(e);
     }
+    this.setState({ sending: false });
   }
 
   signUp = () => {
@@ -135,6 +139,7 @@ class Login extends Component {
                 className={classes.submit}>
                 Entrar
               </Button>
+              {this.state.sending && <LinearProgress />}
             </form>
             <Link
               className={classes.link}

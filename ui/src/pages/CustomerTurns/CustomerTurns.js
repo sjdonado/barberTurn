@@ -3,8 +3,8 @@ import { connect } from 'react-redux';
 import { withStyles } from '@material-ui/core/styles';
 import PropTypes from 'prop-types';
 
-import { getAll } from '../../services/userProductsService';
-import ProductCardQR from '../../components/ProductCardQR';
+import { getAll } from '../../services/userPromotionsService';
+import TurnCardQR from '../../components/TurnCardQR';
 
 const styles = theme => ({
   content: {
@@ -15,16 +15,16 @@ const styles = theme => ({
   },
 });
 
-class CustomerProducts extends Component {
+class CustomerTurns extends Component {
   state = {
-    products: []
+    promotions: []
   }
 
   async componentDidMount() {
     try {
       const res = await getAll();
       console.log(res.data);
-      this.setState({ products: res.data.reverse() })
+      this.setState({ promotions: res.data.reverse() })
     } catch(e) {
       console.log(e);
     }
@@ -35,15 +35,15 @@ class CustomerProducts extends Component {
     return (
       <main className={classes.content}>
         <div className={classes.appBarSpacer} />
-        {this.state.products.map((userProduct, index) => (
-          <ProductCardQR key={index} userProduct={userProduct}/>
+        {this.state.promotions.map((userProduct, index) => (
+          <TurnCardQR key={index} userProduct={userProduct}/>
         ))}
       </main>
     );
   }
 }
 
-CustomerProducts.propTypes = {
+CustomerTurns.propTypes = {
   classes: PropTypes.object.isRequired,
 };
 
@@ -56,4 +56,4 @@ const mapDispatchToProps = {};
 export default connect(
   mapStateToProps,
   mapDispatchToProps
-)(withStyles(styles)(CustomerProducts));
+)(withStyles(styles)(CustomerTurns));

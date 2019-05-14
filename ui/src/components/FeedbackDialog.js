@@ -38,8 +38,7 @@ class FeedbackDialog extends Component {
       <Dialog
         open={open}
         onClose={() => this.props.onClose(null)}
-        aria-labelledby="form-dialog-title"
-      >
+        aria-labelledby="form-dialog-title">
         <DialogTitle id="form-dialog-title">Calificar</DialogTitle>
         <DialogContent>
           <DialogContentText>

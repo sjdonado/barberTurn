@@ -1,6 +1,6 @@
 import Requests from './requests';
 
-const PATH = '/user-products';
+const PATH = '/user-promotions';
 
 export function create(body) {
   return Requests.post(`${PATH}`, body);

@@ -14,12 +14,12 @@ import AddIcon from '@material-ui/icons/Add';
 import LinearProgress from '@material-ui/core/LinearProgress';
 
 import Utils from '../../utils';
-import { create, update, remove, getAllByBusiness } from '../../services/productsService';
+import { create, update, remove, getAllByBusiness } from '../../services/promotionsService';
 import EnhancedTable from '../../components/EnhancedTable';
-import ProductCard from '../../components/ProductCard';
+import PromotionCard from '../../components/PromotionCard';
 import SimpleSnackbar from '../../components/SimpleSnackbar';
 
-import { saveProduct, removeProduct } from '../../actions';
+import { savePromotion, removePromotion } from '../../actions';
 
 
 const styles = theme => ({
@@ -87,7 +87,7 @@ const styles = theme => ({
   }
 });
 
-const initialProduct = {
+const initialPromotion = {
   name: '',
   description: '',
   price: '',
@@ -104,17 +104,17 @@ class Dashboard extends Component {
     fileUrl: null,
     createOrUpdateModalOpen: false,
     createOrUpdateModalType: '',
-    viewProduct: null,
+    viewPromotion: null,
     errorMessage: null,
-    products: [],
-    product: Object.assign({}, initialProduct),
+    promotions: [],
+    promotion: Object.assign({}, initialPromotion),
   };
 
   async componentWillMount() {
     try {
       const res = await getAllByBusiness();
       console.log(res.data)
-      this.setState({ products: res.data.reverse() });
+      this.setState({ promotions: res.data.reverse() });
     } catch(e) {
       console.log(e);
     }
@@ -127,33 +127,33 @@ class Dashboard extends Component {
   handleClose = () => {
     this.setState({
       createOrUpdateModalOpen: false,
-      viewProduct: null,
+      viewPromotion: null,
       file: null,
       fileUrl: null,
       sending: false,
       errorMessage: null,
-      product: Object.assign({}, initialProduct),
+      promotion: Object.assign({}, initialPromotion),
     });
   };
 
-  handleProductChange = prop => event => {
-    this.setState({ product: Object.assign(this.state.product, { [prop]: event.target.value }) });
+  handlePromotionChange = prop => event => {
+    this.setState({ promotion: Object.assign(this.state.promotion, { [prop]: event.target.value }) });
   };
 
-  handleViewProduct = event => {
-    this.setState({ viewProduct: this.props.product, createOrUpdateModalOpen: true });
+  handleViewPromotion = event => {
+    this.setState({ viewPromotion: this.props.promotion, createOrUpdateModalOpen: true });
   }
 
-  handleEditProduct = event => {
-    this.setState({ createOrUpdateModalType: 'edit', createOrUpdateModalOpen: true, product: this.props.product });
+  handleEditPromotion = event => {
+    this.setState({ createOrUpdateModalType: 'edit', createOrUpdateModalOpen: true, promotion: this.props.promotion });
   }
 
-  handleDeleteProduct = async event => {
+  handleDeletePromotion = async event => {
     try {
-      const res = await remove(this.props.product._id);
+      const res = await remove(this.props.promotion._id);
       console.log(res, res.data._id);
-      if (res.data) this.setState({ products: this.state.products.filter(elem => elem._id !== res.data._id)});
-      this.props.removeProduct();
+      if (res.data) this.setState({ promotions: this.state.promotions.filter(elem => elem._id !== res.data._id)});
+      this.props.removePromotion();
     } catch (e) {
       console.log(e);
     }
@@ -172,26 +172,26 @@ class Dashboard extends Component {
     if (this.state.file) {
       this.setState({ sending: true });
       formData.append('file', this.state.file, this.state.file.name)
-      formData.append('name', this.state.product.name);
-      formData.append('description', this.state.product.description);
-      formData.append('price', this.state.product.price);
-      formData.append('quantity', this.state.product.quantity);
+      formData.append('name', this.state.promotion.name);
+      formData.append('description', this.state.promotion.description);
+      formData.append('price', this.state.promotion.price);
+      formData.append('quantity', this.state.promotion.quantity);
       try {
         switch (this.state.createOrUpdateModalType) {
           case 'create':
             console.log('FILE', this.state.file);
-            const product = await create(formData);
-            if (product.data) this.setState({ products: [product.data, ...this.state.products], file: null });
+            const promotion = await create(formData);
+            if (promotion.data) this.setState({ promotions: [promotion.data, ...this.state.promotions], file: null });
             break;
           case 'edit':
-            const updatedProduct = await update(formData, this.state.product._id);
-            console.log(updatedProduct.data);
-            const products = this.state.products.map(elem => {
-              if (elem._id === updatedProduct.data._id) return updatedProduct.data;
+            const updatedPromotion = await update(formData, this.state.promotion._id);
+            console.log(updatedPromotion.data);
+            const promotions = this.state.promotions.map(elem => {
+              if (elem._id === updatedPromotion.data._id) return updatedPromotion.data;
               return elem;
             });
-            if (updatedProduct.data) this.setState({ products, file: null });
-            this.props.removeProduct();
+            if (updatedPromotion.data) this.setState({ promotions, file: null });
+            this.props.removePromotion();
             break;
           default:
             break;
@@ -209,13 +209,13 @@ class Dashboard extends Component {
     const { classes } = this.props;
     return (
       <main className={classes.content}>
-        <EnhancedTable data={this.state.products} handleViewProduct={this.handleViewProduct} handleEditProduct={this.handleEditProduct} handleDeleteProduct={this.handleDeleteProduct}/>
+        <EnhancedTable data={this.state.promotions} handleViewPromotion={this.handleViewPromotion} handleEditPromotion={this.handleEditPromotion} handleDeletePromotion={this.handleDeletePromotion}/>
         <Fab color="primary" aria-label="Add" className={classes.fab} onClick={this.handleOpen}>
           <AddIcon />
         </Fab>
         <Modal
-          aria-labelledby="product-modal-title"
-          aria-describedby="product-modal-description"
+          aria-labelledby="promotion-modal-title"
+          aria-describedby="promotion-modal-description"
           open={this.state.createOrUpdateModalOpen}
           onClose={this.handleClose}>
           <div>
@@ -225,14 +225,13 @@ class Dashboard extends Component {
                 <CloseIcon />
               </IconButton>
               <Typography variant="h4" className={classes.modalTitle}>
-                {this.state.viewProduct ? 'Detalles' : this.state.createOrUpdateModalType === 'create' ? 'Nueva promoción': 'Editar promoción'}
+                {this.state.viewPromotion ? 'Detalles' : this.state.createOrUpdateModalType === 'create' ? 'Nueva promoción': 'Editar promoción'}
               </Typography>
               {/* <Divider variant="middle" fullWidth/> */}
-              { this.state.viewProduct ? <ProductCard product={this.state.viewProduct} /> :
+              { this.state.viewPromotion ? <PromotionCard promotion={this.state.viewPromotion} /> :
                 <div>
                   <img className={classes.bigAvatar}
-                    src={this.state.product.coverPicture.url || this.state.fileUrl}
-                    alt="Avatar" />
+                    src={this.state.promotion.coverPicture.url || this.state.fileUrl} />
                   <form className={classes.container} autoComplete="off" onSubmit={this.handleSubmit}>
                     <input
                       id="file-input"
@@ -240,13 +239,13 @@ class Dashboard extends Component {
                       onChange={this.onFileChange} />
                     <TextField
                       required
-                      id="outlined-product-name"
+                      id="outlined-promotion-name"
                       label="Nombre"
                       className={classes.textField}
                       margin="normal"
                       variant="outlined"
-                      value={this.state.product.name}
-                      onChange={this.handleProductChange('name')}/>
+                      value={this.state.promotion.name}
+                      onChange={this.handlePromotionChange('name')}/>
                     <TextField
                       required
                       id="outlined-textarea-description"
@@ -255,17 +254,17 @@ class Dashboard extends Component {
                       className={classes.textField}
                       margin="normal"
                       variant="outlined"
-                      value={this.state.product.description}
-                      onChange={this.handleProductChange('description')}/>
+                      value={this.state.promotion.description}
+                      onChange={this.handlePromotionChange('description')}/>
                     <div className={classes.rowParent}>
                       <TextField
                         required
-                        id="outlined-product-price"
+                        id="outlined-promotion-price"
                         className={classes.middleTextField}
                         variant="outlined"
                         label="Precio"
-                        value={this.state.product.price}
-                        onChange={this.handleProductChange('price')}
+                        value={this.state.promotion.price}
+                        onChange={this.handlePromotionChange('price')}
                         margin="normal"
                         style={{marginRight: '1em'}}
                         InputProps={{
@@ -275,8 +274,8 @@ class Dashboard extends Component {
                         required
                         id="outlined-number-quantity"
                         label="Cantidad"
-                        value={this.state.product.quantity}
-                        onChange={this.handleProductChange('quantity')}
+                        value={this.state.promotion.quantity}
+                        onChange={this.handlePromotionChange('quantity')}
                         type="number"
                         className={classes.middleTextField}
                         InputLabelProps={{
@@ -312,12 +311,12 @@ Dashboard.propTypes = {
 };
 
 const mapStateToProps = (state, ownProps) => ({
-  product: state.product,
+  promotion: state.promotion,
 });
 
 const mapDispatchToProps = {
-  saveProduct,
-  removeProduct,
+  savePromotion,
+  removePromotion,
 };
 
 export default connect(

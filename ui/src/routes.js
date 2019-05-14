@@ -4,7 +4,7 @@ import Loadable from 'react-loadable'
 // import Dashboard from './pages/Dashboard';
 // import Home from './pages/Home';
 // import QrRegister from './pages/QrRegister';
-// import CustomerProducts from './pages/CustomerProducts';
+// import CustomerTurns from './pages/CustomerTurns';
 
 function Loading() {
   return <div>Loading...</div>;
@@ -30,8 +30,8 @@ const QrRegister = Loadable({
   loading: Loading,
 });
 
-const CustomerProducts = Loadable({
-  loader: () => import('./pages/CustomerProducts'),
+const CustomerTurns = Loadable({
+  loader: () => import('./pages/CustomerTurns'),
   loading: Loading,
 });
 
@@ -53,7 +53,7 @@ const routes = [
   { path: '/dashboard/customers', exact: true, role: true, name: 'QR register', component: CompanyCustomers },
   { path: '/dashboard/feedbacks', exact: true, role: true, name: 'Feedbacks', component: Feedbacks },
   { path: '/home', exact: true, role: false, name: 'Home', component: Home },
-  { path: '/home/products', exact: true, role: false, name: 'My products', component: CustomerProducts },
+  { path: '/home/turns', exact: true, role: false, name: 'My turns', component: CustomerTurns },
 ];
 
 export default routes;

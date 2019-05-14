@@ -8,6 +8,7 @@ const config = {
   aws: {
     keyId: process.env.AWS_KEY_ID,
     secretKey: process.env.AWS_SECRET_KEY,
+    bucketName: process.env.AWS_BUCKET_NAME,
   },
   database: {
     url: process.env.DATABASE_URL,

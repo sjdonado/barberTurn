@@ -17,6 +17,7 @@ import InputLabel from '@material-ui/core/InputLabel';
 import SimpleSnackbar from '../../components/SimpleSnackbar';
 import Link from '@material-ui/core/Link';
 import Switch from '@material-ui/core/Switch';
+import LinearProgress from '@material-ui/core/LinearProgress';
 
 import Utils from '../../utils';
 import { create, createGoogleOauth } from '../../services/usersService';
@@ -84,6 +85,7 @@ class SignUp extends Component {
     fileUrl: null,
     snackbarMessage: null,
     googleAuth: null,
+    sending: false,
   }
 
   handleChange = name => event => {
@@ -108,6 +110,8 @@ class SignUp extends Component {
   
   submit = async (e) => {
     e.preventDefault();
+    this.setState({ sending: true });
+
     if (this.state.googleAuth) {
       try {
         const data = {
@@ -120,7 +124,7 @@ class SignUp extends Component {
         console.log('res', res, res.data)
         this.props.saveUser(res.data);
       } catch (e) {
-        this.setState({snackbarMessage: 'User already exists'});
+        this.setState({ snackbarMessage: 'User already exists'});
         console.log(e);
       }
     } else {
@@ -138,10 +142,12 @@ class SignUp extends Component {
         console.log('res', res, res.data)
         this.props.saveUser(res.data);
       } catch (e) {
-        this.setState({snackbarMessage: 'User already exists'});
+        this.setState({ snackbarMessage: 'User already exists'});
         console.log(e);
       }
     }
+
+    this.setState({ sending: false });
   }
 
   login = () => {
@@ -224,6 +230,7 @@ class SignUp extends Component {
                 className={classes.submit}>
                 Continuar
               </Button>
+              {this.state.sending && <LinearProgress />}
             </form>
             <Link
               className={classes.link}

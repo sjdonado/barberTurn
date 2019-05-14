@@ -7,9 +7,9 @@ import Divider from '@material-ui/core/Divider';
 import Button from '@material-ui/core/Button';
 import QrReader from "react-qr-reader";
 
-import { get, setStatus } from '../../services/userProductsService';
+import { get, setStatus } from '../../services/userPromotionsService';
 import SimpleSnackbar from '../../components/SimpleSnackbar';
-import ProductCard from '../../components/ProductCard';
+import PromotionCard from '../../components/PromotionCard';
 
 const styles = theme => ({
   root: {
@@ -39,7 +39,7 @@ class QrRegister extends Component {
     delay: 1000,
     openSnackbar: false,
     snackbarMessage: null,
-    userProduct: null,
+    userPromotion: null,
   };
   
   handleScan = async id => {
@@ -50,7 +50,7 @@ class QrRegister extends Component {
         this.setState({
           openSnackbar: true,
           snackbarMessage: `Lectura registrada correctamente`,
-          userProduct: res.data,
+          userPromotion: res.data,
         });
       } catch(e) {
         console.log(e);
@@ -59,14 +59,14 @@ class QrRegister extends Component {
   }
 
   handleAcceptClick = async () => {
-    const res = await setStatus(this.state.userProduct._id, { status: 'accepted' });
-    this.setState({ userProduct: Object.assign(this.state.userProduct, { status: res.status }) });
+    const res = await setStatus(this.state.userPromotion._id, { status: 'accepted' });
+    this.setState({ userPromotion: Object.assign(this.state.userPromotion, { status: res.status }) });
     console.log(res);
   };
 
   handleRejectClick = async () => {
-    const res = await setStatus(this.state.userProduct._id, { status: 'rejected' });
-    this.setState({ userProduct: Object.assign(this.state.userProduct, { status: res.status }) });
+    const res = await setStatus(this.state.userPromotion._id, { status: 'rejected' });
+    this.setState({ userPromotion: Object.assign(this.state.userPromotion, { status: res.status }) });
     console.log(res);
   };
 
@@ -90,15 +90,15 @@ class QrRegister extends Component {
               style={{ width: "100%" }}
             />
           </div>
-          { this.state.userProduct ? 
+          { this.state.userPromotion ? 
             <div className={classes.card}>
-              <ProductCard
-                product={this.state.userProduct.product}
-                secondaryText={`Cantidad disponible: ${this.state.userProduct.quantity}`}/>
+              <PromotionCard
+                promotion={this.state.userPromotion.promotion}
+                secondaryText={`Cantidad disponible: ${this.state.userPromotion.quantity}`}/>
               <Divider variant="middle" />
               <div className={classes.section2}>
                 <Button
-                  disabled={this.state.userProduct.status !== 'new'}
+                  disabled={this.state.userPromotion.status !== 'new'}
                   fullWidth
                   onClick={this.handleAcceptClick}
                   variant="contained"
@@ -108,7 +108,7 @@ class QrRegister extends Component {
               </div>
               <div className={classes.section2}>
                 <Button
-                  disabled={this.state.userProduct.status !== 'new'}
+                  disabled={this.state.userPromotion.status !== 'new'}
                   fullWidth
                   onClick={this.handleRejectClick}
                   variant="contained"

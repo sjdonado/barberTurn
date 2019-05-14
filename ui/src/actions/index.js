@@ -8,12 +8,12 @@ export const removeUser = user => ({
   user,
 });
 
-export const saveProduct = product => ({
-  type: 'SAVE_PRODUCT',
-  product,
+export const savePromotion = promotion => ({
+  type: 'SAVE_PROMOTION',
+  promotion,
 });
 
-export const removeProduct = product => ({
-  type: 'REMOVE_PRODUCT',
-  product,
+export const removePromotion = promotion => ({
+  type: 'REMOVE_PROMOTION',
+  promotion,
 });
