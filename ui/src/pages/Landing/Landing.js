@@ -6,11 +6,14 @@ import googleBtnI from './assets/images/google_btn.png'
 import searchI from './assets/images/search.png'
 import gMobileUserI from './assets/images/google-mobile-user.png'
 import SearchIcon from '@material-ui/icons/Search';
+import MenuIcon from '@material-ui/icons/Menu';
 import AssignmentTurnedInIcon from '@material-ui/icons/AssignmentTurnedIn';
 import MonetizationOnIcon from '@material-ui/icons/MonetizationOn';
 import FavoriteIcon from '@material-ui/icons/Favorite';
 import Card from '@material-ui/core/Card';
 import CardContent from '@material-ui/core/CardContent';
+import IconButton from '@material-ui/core/IconButton';
+import SwipeableDrawer from '@material-ui/core/SwipeableDrawer';
 import Typography from '@material-ui/core/Typography';
 import { Link } from "react-scroll";
 import Button from '@material-ui/core/Button';
@@ -55,21 +58,19 @@ const Steps = styled.div `
   position: relative;
 `;
 
-const styles = {
-  list: {
-    width: 250,
-  },
-};
+const SideBar = styled.div `
+  width: 250,
+`
+
+const styles = { };
 
 class Landing extends Component {
   state = {
     left: false,
   };
 
-  toggleDrawer = (open) => () => {
-    this.setState({
-      left: open,
-    });
+  toggleDrawer = () => {
+    this.setState(state => ({ left: !state.left}));
   };
 
   componentDidMount() {
@@ -86,46 +87,42 @@ class Landing extends Component {
 
   render() {
     console.log(this.state.hideNav);
-    const bar = !this.state.hideNav && <Bar className="bar">
-    <Link
-      to="description"
-      spy={true}
-      smooth={true}
-      offset={-70}
-      duration= {500}
-    >¿Qué somos?</Link>
-    <Link
-      to="features"
-      spy={true}
-      smooth={true}
-      offset={-70}
-      duration={500}
-    >Beneficios</Link>
-    <Link
-      to="steps"
-      spy={true}
-      smooth={true}
-      offset={-70}
-      duration= {500}
-    >¿Cómo comenzar?</Link>
-    <LinkR to="/login">
-      <Button variant="outlined">Ir al portal</Button>
-    </LinkR>
-  </Bar>
-
+    
+    const bar = !this.state.hideNav ?
+      <Bar className="bar">
+        <Link to="description"
+          spy={true}
+          smooth={true}
+          offset={-70}
+          duration= {500}
+        >¿Qué somos?</Link>
+        <Link to="features"
+          spy={true}
+          smooth={true}
+          offset={-70}
+          duration={500}
+        >Beneficios</Link>
+        <Link to="steps"
+          spy={true}
+          smooth={true}
+          offset={-70}
+          duration= {500}
+        >¿Cómo comenzar?</Link>
+        <LinkR to="/login">
+          <Button variant="outlined">Ir al portal</Button>
+        </LinkR>
+      </Bar> : 
+      <Bar className="bar">
+        <LinkR to="/login">
+          <Button variant="outlined">Ir al portal</Button>
+        </LinkR>
+      </Bar>
   
     return (
       // <Drawer open={this.state.left} onClose={this.toggleDrawer('left', false)}>
       <Wrapper>
-          {/* <IconButton
-            aria-label="Más"
-            onClick={this.toggleDrawer}
-            style={{position: 'absolute', left: '10px', color: 'white', cursor: 'pointer'}}
-          >
-            <MenuIcon />
-          </IconButton> */}
-          {bar}
-          <div className="hero-image">
+        {bar}
+        <div className="hero-image">
             <div className="hero-content">
               <h1> BarberTurn </h1>
             </div>
@@ -135,7 +132,7 @@ class Landing extends Component {
               <span></span>
             </div>
           </div>
-          <Description className="desc" name="description">
+        <Description className="desc" name="description">
             {!this.state.hideNav && <img src={smartphoneI} alt="Smartphone"></img>}
             <div className="content">
               <h2>¿Qué somos?</h2>
@@ -144,7 +141,7 @@ class Landing extends Component {
               evitarán el engorroso evento de tener que dirigirse físicamente al establecimiento y verse obligados a esperar largos tiempos para ser atendido. </p>              
             </div>
           </Description>
-          <Features className="features" name="features">
+        <Features className="features" name="features">
             <h2>Beneficios</h2>
             <div className="icons">
               <div>
@@ -161,7 +158,7 @@ class Landing extends Component {
               </div>
             </div>
           </Features>
-          <Steps className="steps" name="steps">
+        <Steps className="steps" name="steps">
             <h2>¿Cómo comenzar?</h2>
             <div className="cards">
               <Card className="special-card">
@@ -205,7 +202,7 @@ class Landing extends Component {
               <b><a href="https://www.instagram.com/p/BtyihSvAk3RlWXQq-HKlIyC17D53pKxw55S5Kc0/" target="_blank" rel="noopener noreferrer"> Globetrotters</a></b>
             </span>
           </Steps>
-        </Wrapper>
+      </Wrapper>
       //   {sideList}
       // </Drawer>
     )
