@@ -17,7 +17,11 @@ import InputLabel from '@material-ui/core/InputLabel';
 import SimpleSnackbar from '../../components/SimpleSnackbar';
 import Link from '@material-ui/core/Link';
 import Switch from '@material-ui/core/Switch';
+<<<<<<< HEAD
 import LinearProgress from '@material-ui/core/LinearProgress';
+=======
+import './SignUp.scss';
+>>>>>>> 041b197b3837c3671242c5619afbcdaeb07570e9
 
 import Utils from '../../utils';
 import { create, createGoogleOauth } from '../../services/usersService';
@@ -28,19 +32,20 @@ import { saveUser } from '../../actions';
 
 const styles = theme => ({
   main: {
-    width: 'auto',
-    [theme.breakpoints.up(400 + theme.spacing.unit * 3 * 2)]: {
-      width: 400,
-      marginLeft: 'auto',
-      marginRight: 'auto',
-    },
-  },
-  paper: {
-    marginTop: theme.spacing.unit * 8,
-    marginBottom: theme.spacing.unit * 8,
+    height: '100%',
+    width: '100%',
     display: 'flex',
     flexDirection: 'column',
     alignItems: 'center',
+    placeContent: 'center', 
+  },
+  paper: {
+    overflow: 'auto',
+    maxWidth: ' 320px',
+    maxHeight: '600px',
+    [theme.breakpoints.up('sm')]: {
+      maxWidth: '500px',
+    },
     padding: `${theme.spacing.unit * 2}px ${theme.spacing.unit * 3}px ${theme.spacing.unit * 3}px`,
   },
   avatar: {
@@ -142,7 +147,7 @@ class SignUp extends Component {
         console.log('res', res, res.data)
         this.props.saveUser(res.data);
       } catch (e) {
-        this.setState({ snackbarMessage: 'User already exists'});
+        this.setState({snackbarMessage: 'El usuario ya existe'});
         console.log(e);
       }
     }
@@ -159,87 +164,91 @@ class SignUp extends Component {
     return (
       this.props.user ? 
       <Redirect to="/" /> : this.state.signUpView ? (
-        <main className={classes.main}>
-          <CssBaseline />
-          <Paper className={classes.paper}>
-            <Avatar className={classes.avatar}>
-              <LockOutlinedIcon />
-            </Avatar>
-            <Typography component="h1" variant="h5">
-              Registro
-            </Typography>
-            <GoogleLogin
-              className={classes.button}
-              clientId={GOOGLE_CLIENT_ID}
-              buttonText="Registrarse con Google"
-              onSuccess={this.responseGoogleSuccess}
-              onFailure={this.responseGoogleFailure}
-            />
-            <form className={classes.form} onSubmit={this.submit}>
-              <div className={classes.switch}>
-                <FormControlLabel
-                  className={classes.switchFormControlLabel}
-                  control={
-                    <Switch
-                      checked={this.state.role}
-                      onChange={this.handleChange('role')}
-                      value="role" />
-                  }
-                  label='Establecimiento'
+        <div className="wrapper">
+          <main className={classes.main}>
+            <CssBaseline />
+            <Paper className={classes.paper}>
+              <div className="paper-content">
+                <Avatar className={classes.avatar}>
+                  <LockOutlinedIcon />
+                </Avatar>
+                <Typography component="h1" variant="h5">
+                  Registro
+                </Typography>
+                <GoogleLogin
+                  className={classes.button}
+                  clientId={GOOGLE_CLIENT_ID}
+                  buttonText="Registrarse con Google"
+                  onSuccess={this.responseGoogleSuccess}
+                  onFailure={this.responseGoogleFailure}
                 />
-              </div>
-              <Avatar alt="Profile picture" src={this.state.fileUrl} className={classes.bigAvatar} />
-              {
-                !this.state.googleAuth ? (
-                  <div>
-                    <input
-                      id="file-input"
-                      type="file"
-                      onChange={this.onFileChange} />
-                    <FormControl margin="normal" required fullWidth>
-                      <InputLabel htmlFor="name">Nombre</InputLabel>
-                      <Input id="name" name="name" autoFocus />
-                    </FormControl>
-                    <FormControl margin="normal" required fullWidth>
-                      <InputLabel htmlFor="email">Correo electrónico</InputLabel>
-                      <Input id="email" name="email" />
-                    </FormControl>
-                    <FormControl margin="normal" required fullWidth>
-                      <InputLabel htmlFor="password">Contraseña</InputLabel>
-                      <Input name="password" type="password" id="password" />
-                    </FormControl>
+                <form className={classes.form} onSubmit={this.submit}>
+                  <div className={classes.switch}>
+                    <FormControlLabel
+                      className={classes.switchFormControlLabel}
+                      control={
+                        <Switch
+                          checked={this.state.role}
+                          onChange={this.handleChange('role')}
+                          value="role" />
+                      }
+                      label='Establecimiento'
+                    />
                   </div>
-                ) : (
-                  <Typography className={classes.name}>
-                    {this.state.googleAuth.profileObj.name}
-                  </Typography>
-                )
-              }
-              {
-                this.state.role && 
-                (<FormControl margin="normal" required fullWidth>
-                  <InputLabel htmlFor="nit">NIT</InputLabel>
-                  <Input id="nit" name="nit" autoComplete="nit" autoFocus/>
-                </FormControl>)
-              }
-              <Button
-                type="submit"
-                fullWidth
-                variant="contained"
-                color="primary"
-                className={classes.submit}>
-                Continuar
-              </Button>
-              {this.state.sending && <LinearProgress />}
-            </form>
-            <Link
-              className={classes.link}
-              onClick={this.login} >
-              Ya tienes cuenta? Inicia sesión
-            </Link>
-          </Paper>
-          <SimpleSnackbar open={this.state.snackbarMessage != null} message={this.state.snackbarMessage}/>
-        </main>
+                  <Avatar alt="Profile picture" src={this.state.fileUrl} className={classes.bigAvatar} />
+                  {
+                    !this.state.googleAuth ? (
+                      <div>
+                        <input
+                          id="file-input"
+                          type="file"
+                          onChange={this.onFileChange} />
+                        <FormControl margin="normal" required fullWidth>
+                          <InputLabel htmlFor="name">Nombre</InputLabel>
+                          <Input id="name" name="name" autoFocus />
+                        </FormControl>
+                        <FormControl margin="normal" required fullWidth>
+                          <InputLabel htmlFor="email">Correo electrónico</InputLabel>
+                          <Input id="email" name="email" />
+                        </FormControl>
+                        <FormControl margin="normal" required fullWidth>
+                          <InputLabel htmlFor="password">Contraseña</InputLabel>
+                          <Input name="password" type="password" id="password" />
+                        </FormControl>
+                      </div>
+                    ) : (
+                      <Typography className={classes.name}>
+                        {this.state.googleAuth.profileObj.name}
+                      </Typography>
+                    )
+                  }
+                  {
+                    this.state.role && 
+                    (<FormControl margin="normal" required fullWidth>
+                      <InputLabel htmlFor="nit">NIT</InputLabel>
+                      <Input id="nit" name="nit" autoComplete="nit" autoFocus/>
+                    </FormControl>)
+                  }
+                  <Button
+                    type="submit"
+                    fullWidth
+                    variant="contained"
+                    color="primary"
+                    className={classes.submit}>
+                    Continuar
+                  </Button>
+                  {this.state.sending && <LinearProgress />}
+                </form>
+                <Link
+                  className={classes.link}
+                  onClick={this.login} >
+                  ¿Ya tienes cuenta? Inicia sesión
+                </Link>
+              </div>
+            </Paper>
+            <SimpleSnackbar open={this.state.snackbarMessage != null} message={this.state.snackbarMessage}/>
+          </main>
+        </div>
       ) : <Redirect to="/login" />
     )
   }

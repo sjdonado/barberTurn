@@ -16,6 +16,7 @@ import InputLabel from '@material-ui/core/InputLabel';
 import SimpleSnackbar from '../../components/SimpleSnackbar';
 import Link from '@material-ui/core/Link';
 import LinearProgress from '@material-ui/core/LinearProgress';
+import './Login.scss';
 
 import { GOOGLE_CLIENT_ID } from '../../config';
 import { login, loginGoogle } from '../../services/usersService';
@@ -32,9 +33,12 @@ const styles = theme => ({
     placeContent: 'center', 
   },
   paper: {
-    display: 'flex',
-    flexDirection: 'column',
-    alignItems: 'center',
+    overflow: 'auto',
+    maxWidth: ' 320px',
+    maxHeight: '600px',
+    [theme.breakpoints.up('sm')]: {
+      maxWidth: '500px',
+    },
     padding: `${theme.spacing.unit * 2}px ${theme.spacing.unit * 3}px ${theme.spacing.unit * 3}px`,
   },
   avatar: {
@@ -106,49 +110,53 @@ class Login extends Component {
     return (
       this.props.user ? 
       <Redirect to="/" /> : this.state.loginView ? (
-        <main className={classes.main}>
-          <CssBaseline />
-          <Paper className={classes.paper}>
-            <Avatar className={classes.avatar}>
-              <LockOutlinedIcon />
-            </Avatar>
-            <Typography component="h1" variant="h5">
-              Iniciar sesión
-            </Typography>
-            <GoogleLogin
-              className={classes.button}
-              clientId={GOOGLE_CLIENT_ID}
-              buttonText="Iniciar sesión con Google"
-              onSuccess={this.responseGoogleSuccess}
-              onFailure={this.responseGoogleFailure}
-            />
-            <form className={classes.form} onSubmit={this.submit}>
-              <FormControl margin="normal" required fullWidth>
-                <InputLabel htmlFor="email">Correo electrónico</InputLabel>
-                <Input id="email" name="email" autoComplete="email" autoFocus />
-              </FormControl>
-              <FormControl margin="normal" required fullWidth>
-                <InputLabel htmlFor="password">Contraseña</InputLabel>
-                <Input name="password" type="password" id="password" autoComplete="current-password" />
-              </FormControl>
-              <Button
-                type="submit"
-                fullWidth
-                variant="contained"
-                color="primary"
-                className={classes.submit}>
-                Entrar
-              </Button>
-              {this.state.sending && <LinearProgress />}
-            </form>
-            <Link
-              className={classes.link}
-              onClick={this.signUp} >
-              Crear una cuenta
-            </Link>
-          </Paper>
-          <SimpleSnackbar open={this.state.snackbarMessage != null} message={this.state.snackbarMessage}/>
-        </main>
+        <div className="wrapper">
+          <main className={classes.main}>
+            <CssBaseline />
+            <Paper className={classes.paper}>
+              <div className="paper-content">
+                <Avatar className={classes.avatar}>
+                  <LockOutlinedIcon />
+                </Avatar>
+                <Typography component="h1" variant="h5">
+                  Iniciar sesión
+                </Typography>
+                <GoogleLogin
+                  className={classes.button}
+                  clientId={GOOGLE_CLIENT_ID}
+                  buttonText="Iniciar sesión con Google"
+                  onSuccess={this.responseGoogleSuccess}
+                  onFailure={this.responseGoogleFailure}
+                />
+                <form className={classes.form} onSubmit={this.submit}>
+                  <FormControl margin="normal" required fullWidth>
+                    <InputLabel htmlFor="email">Correo electrónico</InputLabel>
+                    <Input id="email" name="email" autoComplete="email" autoFocus />
+                  </FormControl>
+                  <FormControl margin="normal" required fullWidth>
+                    <InputLabel htmlFor="password">Contraseña</InputLabel>
+                    <Input name="password" type="password" id="password" autoComplete="current-password" />
+                  </FormControl>
+                  <Button
+                    type="submit"
+                    fullWidth
+                    variant="contained"
+                    color="primary"
+                    className={classes.submit}>
+                    Entrar
+                  </Button>
+                  {this.state.sending && <LinearProgress />}
+                </form>
+                <Link
+                  className={classes.link}
+                  onClick={this.signUp} >
+                  Crear una cuenta
+                </Link>
+              </div>
+            </Paper>
+            <SimpleSnackbar open={this.state.snackbarMessage != null} message={this.state.snackbarMessage}/>
+          </main>
+        </div>
       ) : <Redirect to="/signup" />
     )
   }
