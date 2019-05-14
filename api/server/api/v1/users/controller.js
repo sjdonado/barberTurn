@@ -1,3 +1,5 @@
+const passport = require('passport');
+
 const {
   Model,
   fields,
@@ -5,7 +7,6 @@ const {
 
 const { uploadFile, deleteFile } = require('../../../utils/files');
 const { verifyToken } = require('../../../utils/authentication');
-
 
 exports.companies = async (req, res, next) => {
   Model.find({ role: true })
@@ -28,7 +29,7 @@ exports.create = async (req, res, next) => {
   try {
     Object.assign(body, {
       role: body.role || false,
-      profilePicture: { url: 'https://s3.amazonaws.com/barberTurn/DEFAULT_PROFILE_PICTURE_NO_DELETE.png', key: null },
+      profilePicture: { url: 'https://s3.us-east-2.amazonaws.com/barberturn/DEFAULT_PROFILE_PICTURE_NO_DELETE.png', key: null },
     });
     if (files && files.file) {
       const s3Data = await uploadFile(files.file);
@@ -36,11 +37,15 @@ exports.create = async (req, res, next) => {
         profilePicture: { key: s3Data.key, url: s3Data.Location },
       });
     }
+
     const document = new Model(body);
     const data = await document.save();
-    res.status(201);
-    res.json({
-      data,
+
+    passport.authenticate('local')(req, res, () => {
+      res.status(201);
+      res.json({
+        data,
+      });
     });
   } catch (e) {
     next(e);

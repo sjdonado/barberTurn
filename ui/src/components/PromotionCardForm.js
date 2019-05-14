@@ -6,7 +6,7 @@ import Button from '@material-ui/core/Button';
 import Fab from '@material-ui/core/Fab';
 import AddShoppingCartIcon from '@material-ui/icons/AddShoppingCart';
 import SimpleSnackbar from './SimpleSnackbar';
-import ProductCard from './ProductCard';
+import PromotionCard from './PromotionCard';
 
 const styles = theme => ({
   root: {
@@ -39,7 +39,7 @@ const styles = theme => ({
   }
 });
 
-class ProductCardForm extends Component {
+class PromotionCardForm extends Component {
   state = {
     quantity: '',
     purchase: false,
@@ -57,36 +57,36 @@ class ProductCardForm extends Component {
 
   handleSubmit = event => {
     event.preventDefault();
-    if(this.state.quantity <= this.props.product.quantity) {
-      this.props.handleSubmit({ quantity: this.state.quantity, productId: this.props.product._id });
-      this.props.product.quantity = this.props.product.quantity - this.state.quantity;
+    if(this.state.quantity <= this.props.promotion.quantity) {
+      this.props.handleSubmit({ quantity: this.state.quantity, promotionId: this.props.promotion._id });
+      this.props.promotion.quantity = this.props.promotion.quantity - this.state.quantity;
       this.setState({
         openSnackbar: true,
-        snackbarMessage: `${this.props.product.name} agregado correctamente`,
+        snackbarMessage: `${this.props.promotion.name} agregado correctamente`,
         quantity: '',
         purchase: false,
       });
     } else {
       this.setState({
         openSnackbar: true,
-        snackbarMessage: `Error al agregar ${this.props.product.name}, cantidad máxima: ${this.props.product.quantity}`
+        snackbarMessage: `Error al agregar ${this.props.promotion.name}, cantidad máxima: ${this.props.promotion.quantity}`
       });
     }
   }
 
   render() {
-    const { classes, product } = this.props;
+    const { classes, promotion } = this.props;
     return (
       // style={getCardStyle()}
       <div className={classes.root}>
         <form autoComplete="off" onSubmit={this.handleSubmit}>
-          <ProductCard product={product} secondaryText={`Cantidad disponible: ${product.quantity}`}/>
+          <PromotionCard promotion={promotion} secondaryText={`Cantidad disponible: ${promotion.quantity}`}/>
           {
             !this.state.purchase && (
               <Fab
                 color="primary"
                 aria-label="Add"
-                disabled={product.quantity <= 0}
+                disabled={promotion.quantity <= 0}
                 className={classes.fab}
                 onClick={this.handlePurchase} >
                 <AddShoppingCartIcon />
@@ -134,8 +134,8 @@ class ProductCardForm extends Component {
   }
 }
 
-ProductCardForm.propTypes = {
+PromotionCardForm.propTypes = {
   classes: PropTypes.object.isRequired,
 };
 
-export default withStyles(styles)(ProductCardForm);
+export default withStyles(styles)(PromotionCardForm);

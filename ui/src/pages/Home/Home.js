@@ -3,7 +3,7 @@ import { withStyles } from '@material-ui/core/styles';
 import PropTypes from 'prop-types';
 import Typography from '@material-ui/core/Typography';
 import CompanyCard from '../../components/CompanyCard';
-import CompanyProducts from '../../components/CompanyProducts';
+import CompanyPromotions from '../../components/CompanyPromotions';
 import IconButton from '@material-ui/core/IconButton';
 import ArrowBackIcon from '@material-ui/icons/ArrowBack';
 import RateReviewIcon from '@material-ui/icons/RateReview';
@@ -95,7 +95,7 @@ class Home extends Component {
               </IconButton>
             </div>
           </div>
-          <CompanyProducts company={this.state.company} />
+          <CompanyPromotions company={this.state.company} />
           <FeedbackDialog open={this.state.feedback}
             onClose={this.closeFeedbackDialog} />
         </div>

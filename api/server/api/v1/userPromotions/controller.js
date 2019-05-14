@@ -6,7 +6,7 @@ const {
   references,
 } = require('./model');
 
-const { Product } = require('../products/controller');
+const { Promotion } = require('../promotions/controller');
 
 const referencesNames = [
   ...Object.getOwnPropertyNames(references),
@@ -50,11 +50,11 @@ exports.create = async (req, res, next) => {
     user,
   } = req;
   try {
-    const document = new Model(Object.assign(body, { user: user.id, product: body.productId }));
+    const document = new Model(Object.assign(body, { user: user.id, promotion: body.promotionId }));
     const data = await document.save();
-    const product = await Product.findById(body.productId);
-    Object.assign(product, { quantity: product.quantity - body.quantity });
-    await product.save();
+    const promotion = await Promotion.findById(body.promotionId);
+    Object.assign(promotion, { quantity: promotion.quantity - body.quantity });
+    await promotion.save();
     res.status(201);
     res.json({
       data,
@@ -70,13 +70,13 @@ exports.read = async (req, res, next) => {
     user,
   } = req;
   try {
-    const product = await Product.findById(doc.product);
-    if (user.getId().toString() === product.user.toString()) {
+    const promotion = await Promotion.findById(doc.promotion);
+    if (user.getId().toString() === promotion.user.toString()) {
       // Object.assign(doc, { verified: true });
       // const data = await doc.save();
       res.status(200);
       res.json({
-        data: Object.assign(doc, { product }),
+        data: Object.assign(doc, { promotion }),
       });
     } else {
       next(new Error('Bad request'));
@@ -84,7 +84,7 @@ exports.read = async (req, res, next) => {
     // if (!doc.verified) {
     // } else {
     //   res.json({
-    //     data: Object.assign(doc, { product }),
+    //     data: Object.assign(doc, { promotion }),
     //   });
     // }
   } catch (e) {
@@ -117,11 +117,11 @@ exports.qualify = async (req, res, next) => {
   } = req;
   const { qualify } = body;
   if (doc.status === 1) {
-    const product = await Product.findOne({ _id: doc.product });
-    await product.update(Object.assign(product, {
+    const promotion = await Promotion.findOne({ _id: doc.promotion });
+    await promotion.update(Object.assign(promotion, {
       qualify: {
-        quantity: product.qualify.quantity + qualify,
-        users: product.qualify.users + 1,
+        quantity: promotion.qualify.quantity + qualify,
+        users: promotion.qualify.users + 1,
       },
     }));
     Object.assign(doc, { status: 3, qualify });
@@ -143,10 +143,10 @@ exports.companyCustomers = async (req, res, next) => {
 
   console.log('doc', req);
   try {
-    const products = await Product.find({ user: user.id });
+    const promotions = await Promotion.find({ user: user.id });
     const data = await Model
       .find({
-        product: { $in: products.map(product => product._id) },
+        promotion: { $in: promotions.map(promotion => promotion._id) },
       })
       .populate(referencesNames[1], '-_id -user')
       .populate(referencesNames[0], '-_id -password');

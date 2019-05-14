@@ -174,7 +174,7 @@ class FeedbacksTable extends React.Component {
   }
 
   componentWillReceiveProps(nextProps) {
-    if (nextProps.product == null) this.setState({ selected: -1 });
+    if (nextProps.promotion == null) this.setState({ selected: -1 });
   }
 
   handleRequestSort = (event, property) => {
@@ -190,8 +190,8 @@ class FeedbacksTable extends React.Component {
 
   handleClick = (event, n) => {
     const selected = this.props.data.indexOf(n);
-    // this.setState({ product: n });
-    this.props.saveProduct(n);
+    // this.setState({ promotion: n });
+    this.props.savePromotion(n);
 
     if(selected === this.state.selected) {
       this.setState({ selected: -1 });
@@ -213,7 +213,7 @@ class FeedbacksTable extends React.Component {
   selectedName = selected => selected !== -1 && this.props.data.length > 0 && this.props.data[selected] ? this.props.data[selected].name : ""
 
   render() {
-    const { classes, handleViewProduct, handleEditProduct, handleDeleteProduct } = this.props;
+    const { classes, handleViewPromotion, handleEditPromotion, handleDeletePromotion } = this.props;
     const { order, orderBy, selected, rowsPerPage, page } = this.state;
     const emptyRows = rowsPerPage - Math.min(rowsPerPage, this.props.data.length - page * rowsPerPage);
 
@@ -221,9 +221,9 @@ class FeedbacksTable extends React.Component {
       <Paper className={classes.root}>
         <FeedbacksTableToolbar 
           selected={selected}
-          handleViewProduct={handleViewProduct}
-          handleEditProduct={handleEditProduct}
-          handleDeleteProduct={handleDeleteProduct}
+          handleViewPromotion={handleViewPromotion}
+          handleEditPromotion={handleEditPromotion}
+          handleDeletePromotion={handleDeletePromotion}
           selectedName={this.selectedName(selected)}/>
         <div className={classes.tableWrapper}>
           <Table className={classes.table} aria-labelledby="tableTitle">
@@ -287,7 +287,7 @@ FeedbacksTable.propTypes = {
 };
 
 const mapStateToProps = (state, ownProps) => ({
-  product: state.product,
+  promotion: state.promotion,
 });
 
 export default connect(

@@ -50,18 +50,18 @@ const references = {
   },
 };
 
-const product = new Schema(Object.assign(fields, references), {
+const promotion = new Schema(Object.assign(fields, references), {
   timestamps: true,
 });
 
-product.methods.toJSON = function toJSON() {
+promotion.methods.toJSON = function toJSON() {
   const doc = this.toObject();
   delete doc.__v;
   return doc;
 };
 
 module.exports = {
-  Model: mongoose.model('product', product),
+  Model: mongoose.model('promotion', promotion),
   fields,
   references,
 };

@@ -21,7 +21,7 @@ import EditIcon from '@material-ui/icons/Edit';
 import DeleteIcon from '@material-ui/icons/Delete';
 import { lighten } from '@material-ui/core/styles/colorManipulator';
 
-import { saveProduct } from '../actions';
+import { savePromotion } from '../actions';
 
 
 function desc(a, b, orderBy) {
@@ -130,7 +130,7 @@ const toolbarStyles = theme => ({
 });
 
 let EnhancedTableToolbar = props => {
-  const { selected, selectedName, classes, handleViewProduct, handleEditProduct, handleDeleteProduct } = props;
+  const { selected, selectedName, classes, handleViewPromotion, handleEditPromotion, handleDeletePromotion } = props;
   return (
     <Toolbar
       className={classNames(classes.root, {
@@ -151,18 +151,18 @@ let EnhancedTableToolbar = props => {
       <div className={classes.actions}>
         {selected !== -1 ? (
           <div className={classes.actionsButtons}>
-            <Tooltip title="View">
-              <IconButton aria-label="Ver" onClick={handleViewProduct}>
+            <Tooltip title="Ver">
+              <IconButton aria-label="Ver" onClick={handleViewPromotion}>
                 <InfoIcon />
               </IconButton>
             </Tooltip>
-            <Tooltip title="Edit">
-              <IconButton aria-label="Editar" onClick={handleEditProduct}>
+            <Tooltip title="Editar">
+              <IconButton aria-label="Editar" onClick={handleEditPromotion}>
                 <EditIcon />
               </IconButton>
             </Tooltip>
-            <Tooltip title="Delete">
-              <IconButton aria-label="Eliminar" onClick={handleDeleteProduct}>
+            <Tooltip title="Eliminar">
+              <IconButton aria-label="Eliminar" onClick={handleDeletePromotion}>
                 <DeleteIcon />
               </IconButton>
             </Tooltip>
@@ -204,7 +204,7 @@ class EnhancedTable extends React.Component {
   }
 
   componentWillReceiveProps(nextProps) {
-    if (nextProps.product == null) this.setState({ selected: -1 });
+    if (nextProps.promotion == null) this.setState({ selected: -1 });
   }
 
   handleRequestSort = (event, property) => {
@@ -220,8 +220,8 @@ class EnhancedTable extends React.Component {
 
   handleClick = (event, n) => {
     const selected = this.props.data.indexOf(n);
-    // this.setState({ product: n });
-    this.props.saveProduct(n);
+    // this.setState({ promotion: n });
+    this.props.savePromotion(n);
 
     if(selected === this.state.selected) {
       this.setState({ selected: -1 });
@@ -243,7 +243,7 @@ class EnhancedTable extends React.Component {
   selectedName = selected => selected !== -1 && this.props.data.length > 0 && this.props.data[selected] ? this.props.data[selected].name : ""
 
   render() {
-    const { classes, handleViewProduct, handleEditProduct, handleDeleteProduct } = this.props;
+    const { classes, handleViewPromotion, handleEditPromotion, handleDeletePromotion } = this.props;
     const { order, orderBy, selected, rowsPerPage, page } = this.state;
     const emptyRows = rowsPerPage - Math.min(rowsPerPage, this.props.data.length - page * rowsPerPage);
 
@@ -251,9 +251,9 @@ class EnhancedTable extends React.Component {
       <Paper className={classes.root}>
         <EnhancedTableToolbar 
           selected={selected}
-          handleViewProduct={handleViewProduct}
-          handleEditProduct={handleEditProduct}
-          handleDeleteProduct={handleDeleteProduct}
+          handleViewPromotion={handleViewPromotion}
+          handleEditPromotion={handleEditPromotion}
+          handleDeletePromotion={handleDeletePromotion}
           selectedName={this.selectedName(selected)}/>
         <div className={classes.tableWrapper}>
           <Table className={classes.table} aria-labelledby="tableTitle">
@@ -322,11 +322,11 @@ EnhancedTable.propTypes = {
 };
 
 const mapStateToProps = (state, ownProps) => ({
-  product: state.product,
+  promotion: state.promotion,
 });
 
 const mapDispatchToProps = {
-  saveProduct,
+  savePromotion,
 };
 
 export default connect(

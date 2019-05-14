@@ -10,9 +10,9 @@ import CloseIcon from '@material-ui/icons/Close';
 import Typography from '@material-ui/core/Typography';
 import StarRatingComponent from 'react-star-rating-component';
 
-import ProductCard from './ProductCard';
+import PromotionCard from './PromotionCard';
 import { Card } from '../styles/index';
-import { setQualify } from '../services/userProductsService';
+import { setQualify } from '../services/userPromotionsService';
 
 
 const styles = theme => ({
@@ -53,12 +53,12 @@ const styles = theme => ({
   },
 });
 
-class ProductCardQR extends Component {
+class TurnCardQR extends Component {
   state = {
     openQR: false,
     openQualify: false,
     qualify: 0,
-    userProduct: this.props.userProduct,
+    userPromotion: this.props.userPromotion,
   };
 
   handleShowQrModal = () => {
@@ -75,7 +75,7 @@ class ProductCardQR extends Component {
       const a = document.createElement('a');
       document.body.appendChild(a);
       a.style.display = 'none';
-      a.download = `${this.state.userProduct.product.name}-qr-code.png`;
+      a.download = `${this.state.userPromotion.promotion.name}-qr-code.png`;
       const url = window.URL.createObjectURL(b);
       a.href = url;
       a.click();
@@ -86,12 +86,12 @@ class ProductCardQR extends Component {
   }
 
   handleQualify = async () => {
-    const res = await setQualify(this.state.userProduct._id, { qualify: this.state.qualify });
-    this.setState({ openQualify: false, userProduct: Object.assign(this.state.userProduct, {
-      product: Object.assign(this.state.userProduct.product, {
+    const res = await setQualify(this.state.userPromotion._id, { qualify: this.state.qualify });
+    this.setState({ openQualify: false, userPromotion: Object.assign(this.state.userPromotion, {
+      promotion: Object.assign(this.state.userPromotion.promotion, {
         qualify: {
-          quantity: this.state.userProduct.product.qualify.quantity + this.state.qualify,
-          users: this.state.userProduct.product.qualify.users + 1,
+          quantity: this.state.userPromotion.promotion.qualify.quantity + this.state.qualify,
+          users: this.state.userPromotion.promotion.qualify.users + 1,
         },
       }),
     })});
@@ -116,16 +116,11 @@ class ProductCardQR extends Component {
     const { classes } = this.props;
     return (
       <div className={classes.root}>
-        {/* {
-          this.state.openQR ?  : (
-            <ProductCard product={product} secondaryText={`Cantidad seleccionada: ${userProduct.quantity}`}/>
-          )
-        } */}
-        <ProductCard product={this.state.userProduct.product} secondaryText={`Cantidad seleccionada: ${this.state.userProduct.quantity}`}/>
+        {/* <PromotionCard promotion={this.state.userPromotion.promotion} secondaryText={`Cantidad seleccionada: ${this.state.userPromotion.quantity}`}/> */}
         <Divider variant="middle" />
         <div className={classes.section2}>
           {
-            this.state.userProduct.status === 'new' ? (
+            this.state.userPromotion.status === 'new' ? (
               <Button
                 fullWidth
                 onClick={this.handleShowQrModal}
@@ -136,7 +131,7 @@ class ProductCardQR extends Component {
             ) : (
               <Button
                 fullWidth
-                disabled={this.state.userProduct.status !== 'accepted'}
+                disabled={this.state.userPromotion.status !== 'accepted'}
                 onClick={this.handleShowQualifiyModal}
                 variant="contained"
                 color="primary">
@@ -146,8 +141,8 @@ class ProductCardQR extends Component {
           }
         </div>
         <Modal
-          aria-labelledby="product-modal-title"
-          aria-describedby="product-modal-description"
+          aria-labelledby="promotion-modal-title"
+          aria-describedby="promotion-modal-description"
           open={this.state.openQualify}
           onClose={this.handleCloseQualifyModal}>
           <div className={classes.paper}>
@@ -172,8 +167,8 @@ class ProductCardQR extends Component {
           </div>
         </Modal>
         <Modal
-          aria-labelledby="product-modal-title"
-          aria-describedby="product-modal-description"
+          aria-labelledby="promotion-modal-title"
+          aria-describedby="promotion-modal-description"
           open={this.state.openQR}
           onClose={this.handleCloseQrModal}>
           <div className={classes.paper}>
@@ -181,7 +176,7 @@ class ProductCardQR extends Component {
               <CloseIcon />
             </IconButton>
             <Typography variant="h4" className={classes.modalTitle}>Código QR</Typography>
-            <QRCode id="qrCode" value={this.state.userProduct._id} className={classes.qrCode}/>
+            <QRCode id="qrCode" value={this.state.userPromotion._id} className={classes.qrCode}/>
             <Button
               fullWidth
               onClick={this.handleDownloadQr}
@@ -196,8 +191,8 @@ class ProductCardQR extends Component {
   }
 }
 
-ProductCardQR.propTypes = {
+TurnCardQR.propTypes = {
   classes: PropTypes.object.isRequired,
 };
 
-export default withStyles(styles)(ProductCardQR);
+export default withStyles(styles)(TurnCardQR);

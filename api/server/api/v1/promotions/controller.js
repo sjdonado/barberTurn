@@ -47,7 +47,7 @@ exports.all = async (req, res, next) => {
     });
 };
 
-exports.companyProducts = async (req, res, next) => {
+exports.companyPromotions = async (req, res, next) => {
   const {
     user,
   } = req;
@@ -65,7 +65,7 @@ exports.companyProducts = async (req, res, next) => {
     });
 };
 
-// exports.productsByCompanyId = async (req, res, next) => {
+// exports.promotionsByCompanyId = async (req, res, next) => {
 //   const {
 //     company,
 //   } = req;
@@ -159,4 +159,4 @@ exports.delete = async (req, res, next) => {
   }
 };
 
-exports.Product = Model;
+exports.Promotion = Model;

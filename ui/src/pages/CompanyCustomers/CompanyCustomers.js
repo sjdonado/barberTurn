@@ -8,7 +8,7 @@ import ListItemAvatar from '@material-ui/core/ListItemAvatar';
 import Avatar from '@material-ui/core/Avatar';
 import Typography from '@material-ui/core/Typography';
 
-import { getCustomers } from '../../services/userProductsService';
+import { getCustomers } from '../../services/userPromotionsService';
 
 const styles = theme => ({
   root: {
@@ -28,14 +28,14 @@ const styles = theme => ({
 
 class CompanyCustomers extends Component {
   state = {
-    productsUsers: [],
+    promotionsUsers: [],
   };
 
   async componentWillMount() {
     try {
       const res = await getCustomers();
       console.log(res.data)
-      this.setState({ productsUsers: res.data })
+      this.setState({ promotionsUsers: res.data })
     } catch(e) {
       console.log(e);
     }
@@ -45,19 +45,19 @@ class CompanyCustomers extends Component {
     const { classes } = this.props;
     return (
       <List className={classes.content}>
-        {this.state.productsUsers.map((productUsers, index) => (
+        {this.state.promotionsUsers.map((promotionUsers, index) => (
           <ListItem className={classes.card} alignItems="flex-start" key={index}>
             <ListItemAvatar>
-              <Avatar alt="Remy Sharp" src={productUsers.user.profilePicture.url} />
+              <Avatar alt="Profile picture" src={promotionUsers.user.profilePicture.url} />
             </ListItemAvatar>
             <ListItemText
-              primary={productUsers.user.name}
+              primary={promotionUsers.user.name}
               secondary={
                 <React.Fragment>
                   <Typography component="span" className={classes.inline} color="textPrimary">
-                    Producto: {productUsers.product.name}
+                    Promoción: {promotionUsers.promotion.name}
                   </Typography>
-                  Cantidad: {productUsers.quantity}
+                  Cantidad: {promotionUsers.quantity}
                 </React.Fragment>
               }
             />

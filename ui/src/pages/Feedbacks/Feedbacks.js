@@ -6,7 +6,7 @@ import { getAll } from '../../services/feedbacksService';
 import FeedbacksTable from '../../components/FeedbacksTable';
 import SimpleSnackbar from '../../components/SimpleSnackbar';
 
-import { saveProduct, removeProduct } from '../../actions';
+import { savePromotion, removePromotion } from '../../actions';
 
 
 const styles = theme => ({
@@ -106,12 +106,12 @@ Feedbacks.propTypes = {
 };
 
 const mapStateToProps = (state, ownProps) => ({
-  product: state.product,
+  promotion: state.promotion,
 });
 
 const mapDispatchToProps = {
-  saveProduct,
-  removeProduct,
+  savePromotion,
+  removePromotion,
 };
 
 export default connect(

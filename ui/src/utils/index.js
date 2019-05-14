@@ -1,6 +1,7 @@
 module.exports.getFileUrl = (file, callback) => {
   const reader = new FileReader();
-  reader.readAsDataURL(file);
+  try {
+    reader.readAsDataURL(file);
     reader.onload = () => {
       callback(reader.result);
     };
@@ -8,4 +9,7 @@ module.exports.getFileUrl = (file, callback) => {
       console.log('Error: ', error);
       callback(error);
     }
+  } catch(err) {
+    callback(err);
+  }
 };

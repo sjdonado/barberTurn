@@ -143,7 +143,7 @@ class DefaultLayout extends Component {
       console.log('res', res, res.data)
       this.props.removeUser();
     } catch (e) {
-      this.setState({snackbarMessage: 'Unauthorized user'});
+      this.setState({snackbarMessage: 'Usuario no authorizado'});
       console.log(e);
     }
   }
@@ -215,12 +215,12 @@ class DefaultLayout extends Component {
                   <ListItemText primary="Inicio"/>
                 </ListItem>
               </Link>
-              <Link to="/home/products">
+              <Link to="/home/turns">
                 <ListItem button>
                   <ListItemIcon>
                     <ShoppingCartIcon />
                   </ListItemIcon>
-                  <ListItemText primary="Mis promociones"/>
+                  <ListItemText primary="Mis turnos"/>
                 </ListItem>
               </Link>
             </div>

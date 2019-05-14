@@ -7,11 +7,10 @@ AWS.config.update({
 });
 
 const s3 = new AWS.S3();
-const bucketName = 'barberTurn';
 
 const uploadFile = (file) => {
   const params = {
-    Bucket: bucketName,
+    Bucket: aws.bucketName,
     Body: file.data,
     Key: `${file.name}_${Date.now()}`,
     ACL: 'public-read',
@@ -22,7 +21,7 @@ const uploadFile = (file) => {
 
 const deleteFile = (Key) => {
   const params = {
-    Bucket: bucketName,
+    Bucket: aws.bucketName,
     Key,
   };
 
